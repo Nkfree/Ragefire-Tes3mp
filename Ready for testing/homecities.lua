@@ -4,6 +4,7 @@
 homecities = {}
 
 homecities.finish = function(eventStatus, pid)
+self = Players[pid]
 	if self.data.homecity ~= nil and config.homecitySpawns[self.data.homecity] ~= nil then
 
 	 local homecitySpawn = config.homecitySpawns[self.data.homecity]

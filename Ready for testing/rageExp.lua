@@ -125,11 +125,13 @@ rageExp.Decide = function(eventStatus, pid, cellDescription)
 
 			if tes3mp.DoesActorHavePlayerKiller(0) then
 				local killerPid = tes3mp.GetActorKillerPid(0)
+			if LoadedCells[cellDescription].data.objectData[uniqueIndex] ~= nil then
 				local refId = LoadedCells[cellDescription].data.objectData[uniqueIndex].refId
 
                     rageExp.ProcessLatestKill(killerPid, refId)
              end
+			end
 end
 
 customEventHooks.registerHandler("OnActorDeath", rageExp.Decide)
-customEventHooks.registerHandler("OnPlayerFinishLogin", rageExp.Login)
+customEventHooks.registerHandler("OnPlayerConnect", rageExp.Login)

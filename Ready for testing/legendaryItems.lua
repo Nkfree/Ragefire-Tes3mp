@@ -47,9 +47,10 @@ legendaryItems.Decide = function(eventStatus, pid, cellDescription)
         local uniqueIndex = tes3mp.GetActorRefNum(0) .. "-" .. tes3mp.GetActorMpNum(0)
 
 	if tes3mp.DoesActorHavePlayerKiller(0) then
-
-					local refId = self.data.objectData[uniqueIndex].refId
+			if LoadedCells[cellDescription].data.objectData[uniqueIndex] ~= nil then
+					local refId = LoadedCells[cellDescription].data.objectData[uniqueIndex].refId
 					legendaryItems.ProcessLatestKill(pid, refId)
+			end
 	end
 
 end
