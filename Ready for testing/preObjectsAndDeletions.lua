@@ -9,6 +9,27 @@ jsonInterface = require("jsonInterface")
 preexistingObjects = jsonInterface.load("preObjects.json")
 refNumDeletionsByCell = jsonInterface.load("refNumDeletionsByCell.json") -- check if this overrides
 
+preObjectsAndDeletions.FixCell = function(eventStatus, pid)
+ 
+ cellDescription = tes3mp.GetCell(pid)
+ 
+    if refNumDeletionsByCell[cellDescription] ~= nil then
+
+        tes3mp.ClearObjectList()
+        tes3mp.SetObjectListPid(pid)
+        tes3mp.SetObjectListCell(cellDescription)
+
+        for arrayIndex, refNum in pairs(refNumDeletionsByCell[cellDescription]) do
+            tes3mp.SetObjectRefNum(refNum)
+            tes3mp.SetObjectMpNum(0)
+            tes3mp.SetObjectRefId("")
+            tes3mp.AddObject()
+        end
+
+        tes3mp.SendObjectDelete()
+    end
+end
+
 
 preObjectsAndDeletions.AddPreexistingObjects = function(eventstatus, pid, cellDescription)
    
@@ -290,3 +311,4 @@ customCommandHooks.registerCommand("delete", preObjectsAndDeletions.DeleteComman
 customCommandHooks.registerCommand("delete", preObjectsAndDeletions.OffDeleteCommand)
 customEventHooks.registerHandler("OnObjectActivate", preObjectsAndDeletions.OnObjectActivate)
 customEventHooks.registerHandler("OnCellLoad", preObjectsAndDeletions.AddPreexistingObjects)
+customEventHooks.registerHandler("OnPlayerCellChange", preObjectsAndDeletions.FixCell)
