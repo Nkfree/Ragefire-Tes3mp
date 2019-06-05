@@ -39,8 +39,8 @@ preObjectsAndDeletions.OffDeleteCommand = function(pid, cmd)
 			tes3mp.SendMessage(pid, "leaving deletemode.\n")
 end
 
-preObjectsAndDeletions.OnObjectActivate = function(pid, cellDescription, objects, players)
-            if Players[pid].data.deletemode == true then -- disables all activations and adds them to refnumdeletions
+preObjectsAndDeletions.OnObjectActivate = function(eventStatus, pid, cellDescription, objects, players)
+            if Players[pid].data.deletemode ~= nil and Players[pid].data.deletemode == true then -- disables all activations and adds them to refnumdeletions
                 isValid = false
                 
                 refNumDeletionsByCell = jsonInterface.load("refNumDeletionsByCell.json")
@@ -49,12 +49,13 @@ preObjectsAndDeletions.OnObjectActivate = function(pid, cellDescription, objects
 				
 				-- got ObjectUniqueIndex above
 				if refNumDeletionsByCell[CurrentCell] == nil then refNumDeletionsByCell[CurrentCell] = {} end
+				local index = 0
                 table.insert(refNumDeletionsByCell[CurrentCell], tonumber(tes3mp.GetObjectRefNum(index)))
 
                 -- note: objectUniqueIndex will be null if you select a player in deletemode!
                 
                 jsonInterface.save("refNumDeletionsByCell.json", refNumDeletionsByCell)
-                tes3mp.SendMessage(pid, "Deleted refNum: " .. tostring(objectUniqueIndex) .. "\n", false)
+                tes3mp.SendMessage(pid, "Deleted refNum: " .. tes3mp.GetObjectRefNum(index) .. "\n", false)
 	end
 end
 

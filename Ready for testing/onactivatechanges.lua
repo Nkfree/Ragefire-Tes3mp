@@ -19,12 +19,16 @@ players elements have form { pid = ... }
 -- https://pastebin.com/1JCJ1R3N
 onactivatechanges = {}
 onactivatechanges.Activate = function(eventStatus, pid, cellDescription, objects, players)
-
-local doesObjectHaveActivatingPlayer = true
-local index = 0
-activatingPid = players[0].pid
-objectUniqueIndex = objects[0].uniqueIndex
-isObjectPlayer = false
+if players.pid ~= nil then 
+isObjectPlayer = true 
+end -- activated object is a player
+if isObjectPlayer ~= true then
+doesObjectHaveActivatingPlayer = true
+index = 0 
+activatingPid = objects[1].activatingPid
+objectUniqueIndex = objects[1].uniqueIndex
+refId = objects[1].refId
+end
  doorTable = {"ex_s_door_rounded", "ex_redoran_hut_01_a", "in_impsmall_door_01", "in_impsmall_trapdoor_01a", "ex_velothicave_door_01", "ex_velothicave_door_03", "ex_emp_tower_01_a", "ex_nord_door_01", "ex_nord_door_02", "ex_common_door_01", "ex_imp_loaddoor_01", "Ex_imp_loaddoor_02", "ex_imp_loaddoor_03", "ex_redoran_barracks_door", "in_redoran_barrack_door", "in_strong_vaultdoor00", "in_ar_door_01", "in_redoran_ladder_01", "door_cavern_doors00", "door_cavern_doors10", "in_r_s_door_01", "in_c_door_arched", "in_c_door_wood_square", "door_cavern_doors20", "ex_emp_tower_01_b", "in_com_trapbottom_01", "in_com_traptop_01", "hlaal_loaddoor_01", "hlaalu_loaddoor_ 02", "in_redoran_hut_door_01", "ex_t_door_01", "ex_t_door_02", "ex_t_door_stone_large", "in_impsmall_door_jail_01", "in_impsmall_loaddoor_01", "ex_t_door_sphere_01", "ex_t_door_slavepod_01", "door_dwrv_double00", "door_dwrv_double01", "in_hlaalu_door", "in_t_housepod_door_exit", "in_t_door_small", "in_t_s_plain_door", "in_t_l_door_01", "ex_de_shack_door", "in_de_shack_door", "door_dwrv_inner00", "ex_cave_door_01", "in_v_s_trapdoor_01", "in_v_s_trapdoor_02", "door_dwrv_main00", "door_dwrv_load00", "ex_velothi_loaddoor_01", "in_dae_door_01", "ex_ashl_door_01", "ex_dae_door_load_oval", "in_ashl_door_01", "ex_ashl_door_02", "ex_common_door_balcony", "ex_velothi_loaddoor_02", "in_ashl_door_02", "in_hlaalu_loaddoor_01", 	"in_hlaalu_loaddoor_02", "in_vivec_grate_door_01", "ex_vivec_grate_01", "in_impsmall_d_cave_01", "In_impsmall_d_hidden_01", "in_velothismall_ndoor_01", "chargen door hall",
  "chargen customs door", "ex_r_trapdoor_01", "in_r_trapdoor_01", "ex_v_palace_grate_01", "ex_de_ship_trapdoor", "in_de_ship_cabindoor", "vivec_grate_door_02", "door_dwrv_loaddown00", "door_dwrv_loadup00", "in_ci_door_01", "smora_fara_door", "pelagiad_halfway_room", "rent_ebon_six_door", "rent_balmora_south_door", "rent_balmora_council_door", "rent_balmora_lucky_door", "rent_balmora_eight_door", "rent_caldera_shenk_door", "rent_maargan_andus_door", "rent_vivec_lizard_door", "rent_vivec_flower_door", "rent_vivec_black_door", "in_v_s_jaildoor_01", "ex_h_pcfort_exdoor_ 01", "ex_r_pcfort_d_01", "ex_r_pcfort_d_02", "ex_h_pcfort_exdoor_ 03", "ex_h_pcfort_exdoor_ 03-3", "ex_h_pcfort_exdoor_ 02", "ex_r_pcfort_d_01-3", "ex_r_pcfort_d_01-2", "ex_t_door_01_pc_hold_a", "ex_t_door_02_pc_hold_a", "ex_t_door_02_pc_hold_b", "ex_t_door_01_pc_hold_b", "in_t_door_small_load", "ex_h_trapdoor_01", "in_h_trapdoor_01", "ex_h_pcfort_trapdoor_01-2", "chargen door exit", "in_velothismall_ndoor_agrippina", "Ex_Cave_Door_01_Koal", "in_de_shipdoor_toplevel", "Ex_DE_ship_cabindoor", "CharGen_ship_trapdoor", "CharGen_cabindoor", "ex_nord_door_01-back", "CharGen Exit Door", "Ex_De_SN_Gate", "In_De_Shack_Trapdoor_01", "In_De_Shack_Trapdoor", "In_Hlaalu_Door_01", "chargen door captain", "hlaalu_loaddoor_ 02_balyn", "chargen_shipdoor", "In_DE_LLshipdoor_Large", "in_ashl_door_02_sha", "Ex_V_palace_grate_02", "Velothi_Sewer_Door", "in_impsmall_door_01_shrine", "Rent_Ghost_Dusk_Door", "chargendoorjournal", "Ex_V_cantondoor_01",
  "in_strong_vaultdoor_tela_UNIQUE", "in_v_s_jaildoor_frelene", "in_ci_door_01_indoor", "Ex_Dae_door_static", "clutter_whouse_door_01", "clutter_whouse_door_02", "door_cavern_vassir_un", "in_velothismall_ndoor_01_jeanne", "door_ravenrock_mine", "Ex_S_door", "In_S_door", "Ex_S_door_double", "ex_S_door_rounded", "ex_S_fence_gate", "Ex_colony_bardoor", "Ex_colony_minedoor", "Ex_colony_door01.NIF", "Ex_colony_door02", "Ex_colony_door03", "Ex_colony_door04", "Ex_colony_door05", "ex_nord_door_wolf", "In_thirsk_door", "Ex_BM_tomb_door_03", "Ex_BM_tomb_door_02", "Ex_BM_tomb_door_01", "Ex_colony_door02_1", "Ex_colony_door04_2", "Ex_colony_door04_1", "Ex_colony_door03_4", "Ex_colony_door02_2", "Ex_colony_door03_1", "Ex_colony_door03_2", "Ex_colony_door04_2b", "Ex_colony_door03_4a", "Ex_colony_door05b_4", "Ex_colony_door05c_4", "Ex_colony_door05_2", "Ex_colony_door02b_2", "Ex_colony_door04_3", "Ex_colony_door04b_3", "Ex_colony_door05_3", "Ex_colony_door04c_3", "BM_KA_door", "BM_KA_door_dark", "ex_S_fence_gate_uni", "BM_IC_door_01", "Ex_S_door_double_fixing", "Ex_S_door_double_fixed", "In_thirsk_door_main_1", "In_thirsk_door_main_2", "ex_nord_door_lair", "BM_IC_door_pelt", "BM_IC_door_pelt_dark", "Ex_colony_door06", "In_thirsk_door_main_1_b", "In_thirsk_door_main_2_b", "ex_nord_door_gyldenhul", "Ex_colony_door07", "Ex_colony_door08", "Ex_colony_door03 int", "Ex_colony_door01_1B.NIF", "Ex_colony_door03_int", "Ex_colony_door05a_4", "Ex_colony_door05_int", "BM_KA_door_dark_udyr", "BM_IC_door_pelt_wolf", 
@@ -662,7 +666,8 @@ logicHandler.RunConsoleCommandOnPlayer(pid, 'say, "Vo\\Misc\\DA_MalacathComplete
 				Players[pid].data["tribunalMainQuest"] >= 1 then
 				isValid = false
 				end	
+				return customEventHooks.makeEventStatus(isValid,isValid)
 end		
 				
-customEventHooks.registerHandler("OnObjectActivate", onactivatechanges.Activate)
+customEventHooks.registerValidator("OnObjectActivate", onactivatechanges.Activate)
 
