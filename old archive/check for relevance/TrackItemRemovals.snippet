@@ -1,0 +1,18 @@
+-- track item removals put into saveinventory
+            elseif action == enumerations.inventory.REMOVE then
+
+                --[[ Start of Ragefire addition ]]
+                -- Track the latest item removals for this player, or clear them if more than 2 seconds
+                -- have passed
+                if self.lastItemsRemoved == nil then self.lastItemsRemoved = {} end
+                if self.lastItemsRemovedTime == nil then self.lastItemsRemovedTime = os.time() end
+
+                if os.time() - self.lastItemsRemovedTime > 2 then
+                    self.lastItemsRemoved = {}
+                end
+
+                table.insert(self.lastItemsRemoved, item)
+                self.lastItemsRemovedTime = os.time()
+
+                self.lastItemsRemovedTime = os.time()
+                --[[ End of Ragefire addition ]]

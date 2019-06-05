@@ -1,0 +1,114 @@
+-- add to eventHandlers OnActivate Chain
+
+if tes3mp.GetSneakState(activatingPid) and isObjectPlayer then -- change to real ones
+		local sneak = Player[activatingPid].data.skills.sneak
+		if sneak > 50 then
+			local stolenPid = tes3mp.GetObjectPid(index)
+			local rando = math.random(sneak)
+			local stolenItem = {}
+				if rando > 40 and Players[activatingPid].data.customVariables.StealTime + 600 > os.time() then -- every 10 minutes
+						
+						
+						-- delete one item from stolen one
+						for i, item in pairs(Players[stolenPid].data.inventory) do
+							stolenItem.refId = item.refId
+							stolenItem.charge = item.charge
+							stolenItem.count = 1
+							Players[pid].data.inventory[i].count = Players[pid].data.inventory[i].count - 1
+							if Players[pid].data.inventory[i].count < 1 then
+								Players[pid].data.inventory[i].count = nil
+							end
+							break -- break at first item we get
+						end
+						
+						
+						-- add one item to activatingPid
+						table.insert(Players[activatingPid].data.inventory, stolenItem)
+						
+						--reload inventorys
+						Players[activatingPid]:LoadInventory()
+						Players[activatingPid]:LoadEquipment()
+						Players[stolenPid]:LoadInventory()
+						Players[stolenPid]:LoadEquipment()
+						
+				else
+					tes3mp.SendMessage(activatingPid, "you had no luck.\n",false)
+				end
+				
+				-- send message to stolen one
+				if rando < 90 then
+					tes3mp.SendMessage(stolenPid, Players[activatingPid].name.." tried to steal from you. Use /jailhim <pid> to jail him now \n",false)
+					Players[stolenPid].data.customVariables.GotStolenAt = os.time()
+					Players[stolenPid].data.customVariables.GotStolenFrom = activatingPid
+					if stolenItem.refId ~= nil then
+						Players[stolenPid].data.customVariables.GotStolenItem = stolenItem.refId
+					end
+				end
+						
+		else
+			tes3mp.SendMessage(activatingPid, "you cant pickpocket from players because your sneak skill is too low.\n",false)
+		end
+		Players[activatingPid].data.customVariables.StealTime = os.time()
+end
+
+-- add to jail.lua's cmd chain to use /jailhim <pid>
+
+	elseif cmd[1] == "jailhim" and Players[pid].data.customVariables.GotStolenAt ~= nil then
+		if Players[pid].data.customVariables.GotStolenAt + 30 < os.time() then
+			local StealerPid = 
+			local StolenItemRef = ""
+			if Players[stolenPid].data.customVariables.GotStolenItem ~= nil then
+				StolenItemRef = Players[stolenPid].data.customVariables.GotStolenItem
+			end
+			if StolenItemRef ~= "" then
+				if inventoryHelper.containsItem(Players[StealerPid].data.inventory, StolenItemRef) then
+					local index = inventoryHelper.getItemIndex(Players[StealerPid].data.inventory, StolenItemRef)
+					local StolenItemCharge = Players[StealerPid].data.inventory[index].charge
+					-- remove the item again
+					Players[StealerPid].data.inventory[index] = nil
+					-- add item to jailer back
+					table.insert(Players[pid].data.inventory, {refId = StolenItemRef, count = 1, charge = StolenItemCharge})
+				end
+			end
+			
+			
+			
+			-----------actually jail 
+			
+					if jail.Data.jailed[name] == nil then
+						local jailed = {}
+						jailed.startTime = os.time(os.date("!*t"))
+						jailed.jailTime = 300
+						jail.jailer = Players[pid].name
+						
+						
+						jail.Data.jailed[name] = jailed
+						
+						jsonInterface.save("jail.json", jail.Data)
+						
+						tes3mp.SendMessage(pid, color.Green .. "User jailed for pickocketing.     \n".. color.Default, true)
+						
+
+						
+
+						jail.TeleportPlayer(targetpid)
+						tes3mp.SendMessage(targetpid, color.Error .. jail.Data.jailMessage.onjail .. color.Default, false)
+						
+						
+					
+						Players[pid].unjailTimer = tes3mp.CreateTimerEx("UnjailPlayer", time.seconds(jailed.jailTime), "i", targetpid)
+						tes3mp.StartTimer(Players[pid].unjailTimer)
+
+
+					else
+						tes3mp.SendMessage(pid, color.Error .. "User is already jailed. \n".. color.Default, false)
+					end
+			
+			
+			
+			
+			
+		else
+			tes3mp.SendMessage(pid, "that time is over.\n",false)
+		end
+

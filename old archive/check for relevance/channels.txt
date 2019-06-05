@@ -1,0 +1,21 @@
+channels should be as easy as this
+
+            --in function OnPlayerSendMessage in eventHandler.lua
+            --replace tes3mp.SendMessage(pid, message, true) with 
+            for pd, pl in pairs(Players) do
+                if pl.data.customVariables.ChatChannel == nil then Players[pd].data.customVariables.ChatChannel = 1 end
+                if pl.data.customVariables.ChatChannel == Players[pid].data.customVariables.ChatChannel then
+                    tes3mp.SendMessage(pd, message, false)
+                end
+            end
+            
+            --place at beginning of function OnPlayerConnect in serverCore
+            Players[pid].data.customVariables.ChatChannel = 1
+            
+            --make command in cmdChain
+            elseif cmd[1] == "channel" and cmd[2] ~= nil then
+                Players[pid].data.customVariables.ChatChannel = tonumber(cmd[2])
+                tes3mp.SendMessage(pid,"You changed to Chat Channel "..cmd[2].."\n")
+            elseif cmd[1] == "mainchannel" then
+                Players[pid].data.customVariables.ChatChannel =1
+                tes3mp.SendMessage(pid,"You changed to Chat Channel main\n")

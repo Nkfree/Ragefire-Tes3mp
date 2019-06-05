@@ -1,0 +1,31 @@
+--take a look at: https://github.com/Boyos999/Boyos-Tes3mp-Scripts/tree/master/Res%20Menu
+-- compare with rageExp.lua
+
+cell/base.lua
+
+Save Actor Death
+
+deathReason = "got rekt by " .. logicHandler.GetChatName(killerPid)
+				local refId = self.data.objectData[uniqueIndex].refId
+                -- backup: rageExp.ProcessLatestKill(killerPid, refId)
+
+				if partySystem.utils.CompletePlayerPartyCheck(killerPid) then                                
+                    local currentCell = tes3mp.GetCell(killerPid)                    
+                    local dynamicParty = partySystem.utils.GetPlayerDynamicParty(killerPid)
+                    local elligiblePidArray = {}                          
+                    for _,playerPid in pairs (dynamicParty["memberPids"]) do       --Sorry, need to iterate twice
+                        if  Players[playerPid].data.location.cell == currentCell then
+                            table.insert(elligiblePidArray,playerPid)
+                        end
+                    end     
+                    for _,playerPid in ipairs (elligiblePidArray) do
+                        rageExp.ProcessLatestKillinParty(playerPid, refId, #elligiblePidArray)
+                    end
+                else
+                    rageExp.ProcessLatestKill(killerPid, refId)
+                end
+
+				tutorialKills.ProcessLatestKill(killerPid, refId)
+				MainQuestRequiredKills.ProcessLatestKill(killerPid, refId)
+				legendaryItems.ProcessLatestKill(killerPid, refId)
+				

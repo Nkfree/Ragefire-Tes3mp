@@ -1,0 +1,30 @@
+--stuck as used by Indoril
+
+--put into commandHandlers cmd Chain
+     elseif cmd[1] == "stuck" then
+        
+
+                if Players[pid].data.customVariables.StuckTime == nil or
+                    os.time() >= Players[pid].data.customVariables.StuckTime + 120 then
+                    
+                    local X = Players[pid].data.customVariables.StuckPosX 
+                    local Y = Players[pid].data.customVariables.StuckPosY
+                    local Z = Players[pid].data.customVariables.StuckPosZ
+                    local locCell = Players[pid].data.customVariables.StuckCell            
+                                tes3mp.SetCell(pid, locCell)
+                                tes3mp.SendCell(pid)
+                                tes3mp.SetPos(pid, X,Y,Z)
+                                tes3mp.SendPos(pid)
+                    Players[pid].data.customVariables.StuckTime = os.time()
+                    tes3mp.SendMessage(pid, "You have fixed your position!\n", false)    
+                else
+                    tes3mp.SendMessage(pid, "You cant use it yet!\n", false)
+                end
+
+--put into eventHandler OnPlayerSkill
+if tes3mp.GetPosY(pid) ~= nil then 
+        Players[pid].data.customVariables.StuckCell = tes3mp.GetCell(pid)
+        Players[pid].data.customVariables.StuckPosX = tes3mp.GetPosX(pid)
+        Players[pid].data.customVariables.StuckPosY = tes3mp.GetPosY(pid)
+        Players[pid].data.customVariables.StuckPosZ = tes3mp.GetPosZ(pid)
+    end

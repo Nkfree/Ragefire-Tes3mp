@@ -1,0 +1,156 @@
+-- useful baseplayer additions 
+-- just copy them into player/base.lua for old menus to work
+
+function BasePlayer:PlaySound(sound)
+    logicHandler.RunConsoleCommandOnPlayer(self.pid, "playsound " .. sound)
+end
+
+function BasePlayer:IncreaseAttribute(attributeName, value)
+    self.data.attributes[attributeName] = self.data.attributes[attributeName] + value
+    self:LoadAttributes()
+end
+
+function BasePlayer:IncreaseSkill(skillName, value)
+    self.data.skills[skillName] = self.data.skills[skillName] + value
+    self:LoadSkills()
+end
+--[[
+function BasePlayer:IncreaseProgressAndSkill(skillName, value)
+	self.data.skills[skillName] = self.data.skills[skillName] + value
+	self:LoadSkills()
+	
+	if self.data.character.class == "barbarian" then
+	self.data.stats.playerLevelProgress = self.data.stats.playerLevelProgress + 1
+    self:LoadLevel()
+	end
+end
+]]--
+function BasePlayer:RunConsoleCommand(consoleCommand)
+    logicHandler.RunConsoleCommandOnPlayer(self.pid, consoleCommand)
+end
+
+function BasePlayer:DisplayMessageBox(message)
+    tes3mp.MessageBox(self.pid, -1, message)
+end
+
+function BasePlayer:IncreaseAttributeBase(attributeBase, value)
+
+    self.data.attributesBase[attributeBase] = self.data.attributesBase[attributeBase] + value
+    self:LoadAttributes()
+end
+
+function BasePlayer:IncreaseHealthBase(value)
+    self.data.stats.healthBase = self.data.stats.healthBase + value
+    self:LoadStatsDynamic()
+end
+
+function BasePlayer:IncreaseMagickaBase(value)
+    self.data.stats.magickaBase = self.data.stats.magickaBase + value
+    self:LoadStatsDynamic()
+end
+
+function BasePlayer:IncreaseFatigueBase(value)
+    self.data.stats.fatigueBase = self.data.stats.fatigueBase + value
+    self:LoadStatsDynamic()
+end
+
+function BasePlayer:HasSpell(spellId)
+    return tableHelper.containsValue(self.data.spellbook, spellId)
+end
+
+function BasePlayer:HasRagepoint(value)
+    return tableHelper.containsValue(self.data.ragepoints, value)
+end
+
+function BasePlayer:HasAbility(abilityId)
+    return tableHelper.containsValue(self.data.abilities, abilityId)
+end
+
+function BasePlayer:SaveAbility(abilityId)
+    if self.data.abilities == nil then
+        self.data.abilities = {}
+    end
+
+    table.insert(self.data.abilities, abilityId)
+end
+
+function BasePlayer:TransportLocation(location)
+
+        local transportLocation = config.transportLocation[location]
+            tes3mp.SetCell(self.pid, transportLocation.cell)
+            tes3mp.SendCell(self.pid)
+            tes3mp.SetPos(self.pid, transportLocation.pos[1], transportLocation.pos[2], transportLocation.pos[3])
+            tes3mp.SetRot(self.pid, transportLocation.rot[1], transportLocation.rot[2])
+            tes3mp.SendPos(self.pid)
+end
+
+function BasePlayer:TransportHomeLocation(location)
+
+		local transportLocation	= config.transportLocation[self.data.transportLocation]
+			tes3mp.SetCell(self.pid, transportLocation.cell)
+			tes3mp.SendCell(self.pid)
+			tes3mp.SetPos(self.pid, transportLocation.pos[1], transportLocation.pos[2], transportLocation.pos[3])
+			tes3mp.SetRot(self.pid, transportLocation.rot[1], transportLocation.rot[2])
+			tes3mp.SendPos(self.pid)
+end
+
+function BasePlayer:HasCustomVariableMinValue(variableName, minValue)
+
+    minValue = tonumber(minValue)
+
+    return self.data.customVariables[variableName] >= minValue
+end
+
+function BasePlayer:HasLessThanCustomVariableValue(variableName, lessThanValue)
+
+    lessThanValue = tonumber(lessThanValue)
+
+    return self.data.customVariables[variableName] < lessThanValue
+end
+
+function BasePlayer:HasCustomVariableExactValue(variableName, exactValue)
+
+    exactValue = tonumber(exactValue)
+
+    return self.data.customVariables[variableName] == exactValue
+end
+
+function BasePlayer:HasCustomVariableMaxValue(variableName, maxValue)
+
+    maxValue = tonumber(maxValue)
+
+    tes3mp.LogMessage(2, "The passed variableName is " .. tostring(variableName) .. ", maxValue is " .. tostring(maxValue))
+    tes3mp.LogMessage(2, "The player's " .. tostring(variableName) .. " is " .. tostring(self.data.customVariables[variableName]))
+
+    return self.data.customVariables[variableName] >= maxValue
+end
+
+function BasePlayer:AddToCustomVariable(variableName, amount)
+    self.data.customVariables[variableName] = self.data.customVariables[variableName] + amount
+end
+
+function BasePlayer:SubtractFromCustomVariable(variableName, amount)
+    self.data.customVariables[variableName] = self.data.customVariables[variableName] - amount
+end
+
+function BasePlayer:SetCustomVariableValue(variableName, value)
+
+    if type(tonumber(value)) == "number" then
+        value = tonumber(value)
+    end
+
+    self.data.customVariables[variableName] = value
+
+end
+
+
+-- useful serverCore.lua addtions
+-- just copy them to serverCore.lua for old menus to work
+
+function MessageAll(message)
+    tes3mp.SendMessage(tableHelper.getAnyValue(Players).pid, message, true)
+end
+
+function MessageSelf(message, pid)
+    Players[pid]:Message(message)	
+end

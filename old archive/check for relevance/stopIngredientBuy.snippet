@@ -1,0 +1,24 @@
+-- stop buying ingredients put into baseplayer:saveinventory
+-- Check if this item's refId starts with ingred_ and if the last object activated
+                -- by this player was an NPC
+                elseif self.activatedUniqueIndex ~= nil and itemRefId:sub(1, 7) == "ingred_" and
+                    tableHelper.containsValue(LoadedCells[self.data.location.cell].data.packets.actorList, self.activatedUniqueIndex) and
+                    logicHandler.IsActorAlive(self.data.location.cell, self.activatedUniqueIndex) then
+
+                    self:LoadItemChanges({item}, enumerations.inventory.REMOVE)
+                    tes3mp.MessageBox(self.pid, -1, "Sorry! You can't buy ingredients from merchants due to recently " ..
+                        "introduced anti-drug regulations.")
+
+                else
+                    inventoryHelper.addItem(self.data.inventory, item.refId, item.count, item.charge,
+                        item.enchantmentCharge, item.soul)
+
+                    if logicHandler.IsGeneratedRecord(item.refId) then
+
+                        local recordStore = logicHandler.GetRecordStoreByRecordId(item.refId)
+
+                        if recordStore ~= nil then
+                            self:AddLinkToRecord(recordStore.storeType, item.refId)
+                        end
+                    end
+                end

@@ -1,0 +1,46 @@
+-- this should be at the top of contentFixer...
+-- remove all other refNumDeletionsByCell
+-- put the json included into /data/ folder
+
+tableHelper = require("tableHelper")
+jsonInterface = require("jsonInterface")
+require("utils")
+
+local contentFixer = {}
+
+refNumDeletionsByCell = jsonInterface.load("refNumDeletionsByCell.json")
+
+
+
+-- copy paste to commandHandler:
+
+
+    elseif cmd[1] == "deletemode" and moderator then
+
+        -- Enables deletemode- activate object to delete it
+        Players[pid].data.deletemode = true
+		tes3mp.SendMessage(pid, "Entering deletemode.\n")
+
+    elseif cmd[1] == "offdelete" and moderator then
+	-- Disables deletemode
+        Players[pid].data.deletemode = false
+        tes3mp.SendMessage(pid, "leaving deletemode.\n")   
+
+-- copy paste below to line 642 of eventHandler / into the OnActivate Chain if you got one
+
+            if Players[pid].data.deletemode == true then -- disables all activations and adds them to refnumdeletions
+                isValid = false
+                
+                refNumDeletionsByCell = jsonInterface.load("refNumDeletionsByCell.json")
+				
+				local CurrentCell = tes3mp.GetCell(pid)
+				
+				-- got ObjectUniqueIndex above
+				if refNumDeletionsByCell[CurrentCell] == nil then refNumDeletionsByCell[CurrentCell] = {} end
+                table.insert(refNumDeletionsByCell[CurrentCell], tonumber(tes3mp.GetObjectRefNum(index)))
+
+                -- note: objectUniqueIndex will be null if you select a player in deletemode!
+                
+                jsonInterface.save("refNumDeletionsByCell.json", refNumDeletionsByCell)
+                tes3mp.SendMessage(pid, "Deleted refNum: " .. tostring(objectUniqueIndex) .. "\n", false)
+            end

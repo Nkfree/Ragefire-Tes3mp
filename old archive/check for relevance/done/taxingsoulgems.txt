@@ -1,0 +1,106 @@
+function BasePlayer:SaveInventory()
+    local SoulGemReload = false
+    local action = tes3mp.GetInventoryChangesAction(self.pid)
+    local itemChangesCount = tes3mp.GetInventoryChangesSize(self.pid)
+ 
+    tes3mp.LogMessage(enumerations.log.INFO, "Saving " .. itemChangesCount .. " item(s) to inventory with action " ..
+        tableHelper.getIndexByValue(enumerations.inventory, action))
+ 
+    if action == enumerations.inventory.SET then
+        self.data.inventory = {}
+    end
+ 
+    for index = 0, itemChangesCount - 1 do
+        local itemRefId = tes3mp.GetInventoryItemRefId(self.pid, index)
+           
+        if itemRefId ~= "" then
+ 
+            local item = {
+                refId = itemRefId,
+                count = tes3mp.GetInventoryItemCount(self.pid, index),
+                charge = tes3mp.GetInventoryItemCharge(self.pid, index),
+                enchantmentCharge = tes3mp.GetInventoryItemEnchantmentCharge(self.pid, index),
+                soul = tes3mp.GetInventoryItemSoul(self.pid, index)
+            }
+ 
+            tes3mp.LogAppend(enumerations.log.INFO, "- id: " .. item.refId .. ", count: " .. item.count ..
+                ", charge: " .. item.charge .. ", enchantmentCharge: " .. item.enchantmentCharge ..
+                ", soul: " .. item.soul)
+ 
+            if action == enumerations.inventory.SET or action == enumerations.inventory.ADD then
+                --enable a gold check over here when
+                --player got soulgem removed last
+                -- for 10 seconds
+                if Players[self.pid] ~= nil and Players[self.pid].data ~= nil and -- just to be sure
+                Players[self.pid].data.SoulGemCheckEnabled ~= nil and Players[self.pid].data.SoulGemCheckEnabled + 10 > os.time() then
+                    if itemRefId == "gold_001" then
+                        -- we got gold after selling a soulgem
+                        -- take a tax. leave 1/100
+                        item.count = math.floor(item.count / 100)
+                        --reload at the end to show changes to client
+                        SoulGemReload = true
+                        tes3mp.MessageBox(self.pid,-1,"You got taxed for selling a soul gem")
+                    end
+                end
+               
+                local cellDescription = self.data.location.cell
+ 
+                -- Don't allow this player to pick up items in a house owned by someone else
+                if kanaHousing.GetIsInHouse(self.pid) ~= false and not kanaHousing.IsOwner(self.accountName, cellDescription) and not kanaHousing.IsCoOwner(self.accountName, cellDescription) then
+                    self:LoadItemChanges({item}, enumerations.inventory.REMOVE)
+                -- Handle all other items normally
+                else
+                    inventoryHelper.addItem(self.data.inventory, item.refId, item.count, item.charge,
+                        item.enchantmentCharge, item.soul)
+ 
+                    if logicHandler.IsGeneratedRecord(item.refId) then
+                        local recordStore = logicHandler.GetRecordStoreByRecordId(item.refId)
+ 
+                        if recordStore ~= nil then
+                            self:AddLinkToRecord(recordStore.storeType, item.refId)
+                        end
+                    end
+                end
+            elseif action == enumerations.inventory.REMOVE then
+                --if we got remove action
+                --check if soulgem
+                local soulTable = {"misc_soulgem_petty","misc_soulgem_lesser","misc_soulgem_common","misc_soulgem_greater","misc_soulgem_grand","misc_soulgem_azura"}
+                if tableHelper.containsValue(soulTable, itemRefId) then
+                --check if got soul in it
+                    if tes3mp.GetInventoryItemSoul(self.pid, index) ~= nil and tes3mp.GetInventoryItemSoul(self.pid, index) ~= "" then
+                       
+                --need to check if gold got raised for 10 seconds
+                    Players[self.pid].data.SoulGemCheckEnabled = os.time() -- for 10 seconds watchGold counter
+                    --tes3mp.SendMessage(self.pid, "deleted sould\n"..itemRefId,false) -- for testing purpose
+                    end
+                end
+               
+               
+               
+                --removes item from inventory
+                inventoryHelper.removeItem(self.data.inventory, item.refId, item.count,
+                    nil, nil, item.soul)
+                ---removing the item from records when removed from inventory
+                if not inventoryHelper.containsItem(self.data.inventory, item.refId) and
+                    logicHandler.IsGeneratedRecord(item.refId) then
+ 
+                    local recordStore = logicHandler.GetRecordStoreByRecordId(item.refId)
+ 
+                    if recordStore ~= nil then
+                        self:RemoveLinkToRecord(recordStore.storeType, item.refId)
+                    end
+                end
+            end
+        end
+    end
+   
+    if action == enumerations.inventory.REMOVE then
+        tableHelper.cleanNils(self.data.inventory)
+    end
+    self:Save()
+   
+    if SoulGemReload == true then
+        self:LoadInventory()
+    end
+    --tes3mp.SendMessage(self.pid,"saved you inv\n",false) -- for testing purpose
+end

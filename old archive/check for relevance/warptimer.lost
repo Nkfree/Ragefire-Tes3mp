@@ -1,0 +1,7 @@
+-- was used to warp players to partymembers?
+
+function OnWarpReminderTimeExpiration(pid)
+	if Players[pid] ~= nil then
+    Players[pid]:Message( color.DarkGray .. "You can now use " .. color.Gold .. "/warp " .. color.DarkGray .. "again.\n")
+	end
+end

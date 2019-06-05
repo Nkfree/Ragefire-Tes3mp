@@ -1,0 +1,32 @@
+--responding
+    if cmd[1] == "message" or cmd[1] == "msg" then
+        if pid == tonumber(cmd[2]) then
+            tes3mp.SendMessage(pid, "You can't message yourself.\n")
+        elseif cmd[3] == nil then
+            tes3mp.SendMessage(pid, "You cannot send a blank message.\n")
+        elseif logicHandler.CheckPlayerValidity(pid, cmd[2]) then
+            local targetPid = tonumber(cmd[2])
+            local targetName = Players[targetPid].name
+            message = logicHandler.GetChatName(pid) .. " to " .. logicHandler.GetChatName(targetPid) .. ": "
+            message = message .. tableHelper.concatenateFromIndex(cmd, 3) .. "\n"
+            Players[targetPid].data.lastmessaged = pid
+                Players[pid].data.lastmessaged = pid
+            tes3mp.SendMessage(pid, message, false)
+            tes3mp.SendMessage(targetPid, message, false)
+        end
+        
+    if cmd[1] == "r" or cmd[1] == "respond" then
+      if Players[pid].data.lastmessaged ~= nil then
+        if logicHandler.CheckPlayerValidity(pid, Players[pid].data.lastmessaged) then
+            
+            local targetPid = tonumber(Players[pid].data.lastmessaged)
+            local targetName = Players[targetPid].name
+            message = logicHandler.GetChatName(pid) .. " to " .. logicHandler.GetChatName(targetPid) .. ": "
+            message = message .. tableHelper.concatenateFromIndex(cmd, 2) .. "\n"
+            Players[targetPid].data.lastmessaged = pid
+            tes3mp.SendMessage(pid, message, false)
+            tes3mp.SendMessage(targetPid, message, false)
+        end
+        else
+         tes3mp.SendMessage(pid, "you need to /msg someone first.",false)
+         end
