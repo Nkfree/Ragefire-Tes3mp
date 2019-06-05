@@ -31,12 +31,13 @@ preObjectsAndDeletions.DeleteCommand = function(pid, cmd)
 			Players[pid].data.deletemode = true
 			tes3mp.SendMessage(pid, "Entering deletemode.\n")
 			
-			elseif cmd[1] == "offdelete" and moderator then
+end
+
+preObjectsAndDeletions.OffDeleteCommand = function(pid, cmd)
 			-- Disables deletemode
 			Players[pid].data.deletemode = false
 			tes3mp.SendMessage(pid, "leaving deletemode.\n")
 end
-
 
 preObjectsAndDeletions.OnObjectActivate = function(pid, cellDescription, objects, players)
             if Players[pid].data.deletemode == true then -- disables all activations and adds them to refnumdeletions
@@ -285,5 +286,6 @@ customCommandHooks.registerCommand("save1", saveme.save2)
 customCommandHooks.registerCommand("save2", saveme.save)
 customCommandHooks.registerCommand("save3", saveme.exactRef)
 customCommandHooks.registerCommand("delete", preObjectsAndDeletions.DeleteCommand)
+customCommandHooks.registerCommand("delete", preObjectsAndDeletions.OffDeleteCommand)
 customEventHooks.registerHandler("OnObjectActivate", preObjectsAndDeletions.OnObjectActivate)
 customEventHooks.registerHandler("OnCellLoad", preObjectsAndDeletions.AddPreexistingObjects)

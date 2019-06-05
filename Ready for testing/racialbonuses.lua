@@ -43,7 +43,7 @@ local self = Players[pid]
 		logicHandler.RunConsoleCommandOnPlayer(self.pid, 'addspell "weakness_fire_25"')
 		logicHandler.RunConsoleCommandOnPlayer(self.pid, 'addspell "weakness_magicka_25"')
 	end	
-end
+--[[ doubled ? 
 
 -- Racial Bonuses	
 	if self.data.character.race == "argonian" then
@@ -80,7 +80,7 @@ end
 		logicHandler.RunConsoleCommandOnPlayer(self.pid, 'addspell "weakness_fire_25"')
 		logicHandler.RunConsoleCommandOnPlayer(self.pid, 'addspell "weakness_magicka_25"')
 	end	
--- End Racial Powers
+-- End Racial Powers]]
 end
 
 customEventHooks.registerHandler("OnPlayerFinishLogin", racialbonuses.use)

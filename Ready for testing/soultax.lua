@@ -58,6 +58,11 @@ soultax = function(EventStatus, pid)
                         tes3mp.MessageBox(self.pid, -1, "You have only received " .. item.count .. " gold from that " ..
                             "transaction due to the soul gem tax.")
                     end
+				end
+			end
+		end
+	end
+			
 end
 
 					

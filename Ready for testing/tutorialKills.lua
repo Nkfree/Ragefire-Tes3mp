@@ -50,11 +50,11 @@ tutorialKills.Decide = function(eventStatus, pid, cellDescription)
 
         local uniqueIndex = tes3mp.GetActorRefNum(0) .. "-" .. tes3mp.GetActorMpNum(0)
 
-if tes3mp.DoesActorHavePlayerKiller(0) then
+	if tes3mp.DoesActorHavePlayerKiller(0) then
 
-				local refId = self.data.objectData[uniqueIndex].refId
-				tutorialKills.ProcessLatestKill = function(pid, refId)
-end
+					local refId = self.data.objectData[uniqueIndex].refId
+					tutorialKills.ProcessLatestKill(pid, refId)
+	end
 
 end
 

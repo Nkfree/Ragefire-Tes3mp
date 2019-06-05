@@ -15,7 +15,7 @@ homecities.finish = function(eventStatus, pid)
 				tes3mp.SendPos(self.pid)
 			end   
 
-			elseif config.defaultSpawnCell ~= nil then
+	elseif config.defaultSpawnCell ~= nil then
 
 				tes3mp.SetCell(self.pid, config.defaultSpawnCell)
 				tes3mp.SendCell(self.pid)
@@ -25,13 +25,13 @@ homecities.finish = function(eventStatus, pid)
 					tes3mp.SetRot(self.pid, config.defaultSpawnRot[1], config.defaultSpawnRot[2])
 					tes3mp.SendPos(self.pid)
 				end
-			end
+			
 
-		///baseplayer resurrect
-		elseif config.respawnAtTribunalTemple == true then
+		--baseplayer resurrect
+	elseif config.respawnAtTribunalTemple == true then
 			currentResurrectType = enumerations.resurrect.TRIBUNAL_TEMPLE
 	----------------------------------------------------------------------------
-		elseif self.data.homecity ~= nil and config.homecitySpawns[self.data.homecity] ~= nil then
+	elseif self.data.homecity ~= nil and config.homecitySpawns[self.data.homecity] ~= nil then
 
 			currentResurrectType = enumerations.resurrect.REGULAR
 			local homecitySpawn = config.homecitySpawns[self.data.homecity]
@@ -47,7 +47,7 @@ homecities.finish = function(eventStatus, pid)
 				logicHandler.RunConsoleCommandOnPlayer(self.pid, "tvm")
 			end
 			
-		end
+	end
 		
 		-- feather buff handle
 		logicHandler.RunConsoleCommandOnPlayer(self.pid, "removespell home_feather")

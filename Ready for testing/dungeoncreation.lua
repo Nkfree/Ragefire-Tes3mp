@@ -190,16 +190,16 @@ dungeoncreation.here = function(eventStatus, pid)
 
 				for _, locationalDisease in pairs(locationalDiseases) do
 
-				if tableHelper.containsValue(Players[pid].data.spellbook, locationalDisease) then
-				-- Is the player no longer in a cell where they should have this cell-specific disease?
-				if not tableHelper.containsValue(cellsForDiseases[locationalDisease], tes3mp.GetCell(pid)) then
-					logicHandler.RunConsoleCommandOnPlayer(pid, "player->removespell " .. locationalDisease)
-					tableHelper.removeValue(Players[pid].data.spellbook, locationalDisease)
-				end
-				elseif tableHelper.containsValue(cellsForDiseases[locationalDisease], tes3mp.GetCell(pid)) then
-					table.insert(Players[pid].data.spellbook, locationalDisease)
-					logicHandler.RunConsoleCommandOnPlayer(pid, "player->addspell " .. locationalDisease)
-				end
+					if tableHelper.containsValue(Players[pid].data.spellbook, locationalDisease) then
+					-- Is the player no longer in a cell where they should have this cell-specific disease?
+						if not tableHelper.containsValue(cellsForDiseases[locationalDisease], tes3mp.GetCell(pid)) then
+							logicHandler.RunConsoleCommandOnPlayer(pid, "player->removespell " .. locationalDisease)
+							tableHelper.removeValue(Players[pid].data.spellbook, locationalDisease)
+						end
+					elseif tableHelper.containsValue(cellsForDiseases[locationalDisease], tes3mp.GetCell(pid)) then
+						table.insert(Players[pid].data.spellbook, locationalDisease)
+						logicHandler.RunConsoleCommandOnPlayer(pid, "player->addspell " .. locationalDisease)
+					end
 				end
 -- Creature Effects			
 				local locationalMonsterBuffs = { "resist_frost_50", "resist_magicka_50", "resist_shock_50", "resist_poison_50", "resist_fire_50", "by_resistancetofire50", "resist_frost_100", "resist_magicka_100", "resist_shock_100", "resist_poison_100", "resist_fire_100", "chameleon25", "chameleon50", "speed25", "fireShield1000", "sanctuary25", "restore_health_1", "restore_health_5", "strength50", "speed10", "agility50","by_elementalresistance25", "by_levitate", "by_restorestrength2", "by_fortifyattack50", "by_restorestrength15" }
@@ -216,7 +216,7 @@ dungeoncreation.here = function(eventStatus, pid)
 
                 Players[pid].data.location.regionName = regionName
                 Players[pid].hasFinishedInitialTeleportation = true
-            end
+            
 
 				--[[
 				for _, uniqueIndex in pairs(LoadedCells[cellDescription].data.packets.actorList) do
