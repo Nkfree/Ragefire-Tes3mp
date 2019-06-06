@@ -1,5 +1,8 @@
 --responding
-    if cmd[1] == "message" or cmd[1] == "msg" then
+
+responding = {}
+
+responding.message = function(pid, cmd)
         if pid == tonumber(cmd[2]) then
             tes3mp.SendMessage(pid, "You can't message yourself.\n")
         elseif cmd[3] == nil then
@@ -14,8 +17,9 @@
             tes3mp.SendMessage(pid, message, false)
             tes3mp.SendMessage(targetPid, message, false)
         end
-        
-    if cmd[1] == "r" or cmd[1] == "respond" then
+end    
+
+responding.respond = function(pid, cmd)	
       if Players[pid].data.lastmessaged ~= nil then
         if logicHandler.CheckPlayerValidity(pid, Players[pid].data.lastmessaged) then
             
@@ -27,6 +31,13 @@
             tes3mp.SendMessage(pid, message, false)
             tes3mp.SendMessage(targetPid, message, false)
         end
-        else
+      else
          tes3mp.SendMessage(pid, "you need to /msg someone first.",false)
-         end
+      end
+end
+
+
+customCommandHooks.registerCommand("msg", responding.message)
+customCommandHooks.registerCommand("message", responding.message)
+customCommandHooks.registerCommand("r", responding.respond)
+customCommandHooks.registerCommand("respond", responding.respond)

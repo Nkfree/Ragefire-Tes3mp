@@ -1,4 +1,7 @@
-		elseif cmd[1] == "chat" or cmd[1] == "c" then
+someMenus = {}
+
+someMenus.cmd = function(pid, cmd)
+if cmd[1] == "chat" or cmd[1] == "c" then
             local race = Players[pid].data.character.race
             local sex = ""
             
@@ -42,41 +45,21 @@
             Players[pid].currentCustomMenu = "poison tips recipes"
             menuHelper.DisplayMenu(pid, Players[pid].currentCustomMenu)
 		
-        elseif cmd[1] == "channel" and cmd[2] ~= nil then
-            Players[pid].data.customVariables.ChatChannel = tonumber(cmd[2])
-            tes3mp.SendMessage(pid,"You changed to Chat Channel "..cmd[2].."\n")
-        elseif cmd[1] == "mainchannel" then
-            Players[pid].data.customVariables.ChatChannel =1
-            tes3mp.SendMessage(pid,"You changed to Chat Channel main\n")
 		
-		elseif cmd[1] == "roll" then
-			tes3mp.SendMessage(pid, Players[pid].name.." rolled a ".. color.Red .. tostring(math.random(100)).."\n",true)
-			
-		elseif cmd[1] == "sc" and moderator then 
-			saveme.save2(pid,cmd[2],cmd[3])
-		elseif cmd[1] == "creat" and cmd[2] ~= nil and moderator then --Spawn exact creatures
-			saveme.exactRef(pid, cmd[2])
-		
-		elseif cmd[1] == "write" then
-			local playerNote = noteWriting.CreateNote(pid,cmd)
-			if playerNote ~= nil then
-				table.insert(Players[pid].data.inventory, playerNote)
-				Players[pid]:LoadInventory()
-				Players[pid]:LoadEquipment()
-				Players[pid]:Save()
-			end
-		
-		
-		elseif cmd[1] == "playtime" and cmd[2] == "all" then
-			playTime.ShowPlayTimeAllConnected(pid)
-		elseif cmd[1] == "playtime" then
-			playTime.ShowPlayTime(pid)
-		--elseif cmd[1] == "market" then
-			--MarketPlace.showMainGUI(pid)
-		elseif cmd[1] == "party" then
-				GroupParty.ShowMain(pid)
 	    elseif cmd[1] == "craft" then
 
         -- Check "scripts/menu/defaultCrafting.lua" if you want to change the example craft menu
         Players[pid].currentCustomMenu = "default crafting origin"
         menuHelper.DisplayMenu(pid, Players[pid].currentCustomMenu)
+		
+		end
+end
+
+customCommandHooks.registerCommand("chat", someMenus.cmd)
+customCommandHooks.registerCommand("test", someMenus.cmd)
+customCommandHooks.registerCommand("leather", someMenus.cmd)
+customCommandHooks.registerCommand("tele", someMenus.cmd)
+customCommandHooks.registerCommand("crafting", someMenus.cmd)
+customCommandHooks.registerCommand("fletching", someMenus.cmd)
+customCommandHooks.registerCommand("poison", someMenus.cmd)
+customCommandHooks.registerCommand("craft", someMenus.cmd)

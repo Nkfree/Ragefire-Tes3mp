@@ -42,6 +42,7 @@ Groupparty
 
 kanaHousing
 kanaFurniture
+kanaRevive
 kanaCellReset
 kanaStorage
 MarketPlace Alternative

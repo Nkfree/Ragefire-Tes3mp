@@ -1,7 +1,7 @@
 -- Unshared journal and starter items
 -- use this: https://github.com/Atkana/tes3mp-scripts/tree/master/0.7/kanaStartingItems
 -- or this: https://github.com/Boyos999/Boyos-Tes3mp-Scripts/tree/master/Starter%20Equipment
-    if config.shareJournal == false and WorldInstance.data.customVariables ~= nil then
+    --[[if config.shareJournal == false and WorldInstance.data.customVariables ~= nil then
         if WorldInstance.data.customVariables.deliveredCaiusPackage ~= false then
   local item = { refId = "bk_a1_1_caiuspackage", count = 1, charge = -1,enchantmentCharge = -1, soul = "" }
 			inventoryHelper.addItem(self.data.inventory, item.refId, item.count, item.charge, 
@@ -18,14 +18,18 @@
 			--tes3mp.MessageBox(self.pid, -1, "Multiplayer skips over the original character generation.")
 
         end
-	end
+	end ]]--
+
+starteritems = {}
 
 
-
-eventHandler.OnPlayerEndCharGen = function(pid)
+starteritems.OnPlayerEndCharGen = function(eventStatus, pid)
     if Players[pid] ~= nil and Players[pid]:IsLoggedIn() then
         Players[pid]:SaveEquipment()
         Players[pid].currentCustomMenu = "appearance"
         menuHelper.DisplayMenu(pid, Players[pid].currentCustomMenu)
     end
 end
+
+
+customEventHooks.registerHandler("OnPlayerEndCharGen", starteritems.OnPlayerEndCharGen)

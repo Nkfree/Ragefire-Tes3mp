@@ -21,7 +21,10 @@
                     tes3mp.SendMessage(pid, "You cant use it yet!\n", false)
                 end
 
---put into eventHandler OnPlayerSkill
+--put into eventHandler OnPlayerSkill 
+-- dont do that
+-- no longer since 0.7 update
+
 if tes3mp.GetPosY(pid) ~= nil then 
         Players[pid].data.customVariables.StuckCell = tes3mp.GetCell(pid)
         Players[pid].data.customVariables.StuckPosX = tes3mp.GetPosX(pid)

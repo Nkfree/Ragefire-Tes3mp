@@ -1,3 +1,10 @@
+--- needs https://github.com/Xenkhan/tes3mp-jail
+-- needs it ported over
+
+
+
+
+
 -- add to eventHandlers OnActivate Chain
 
 if tes3mp.GetSneakState(activatingPid) and isObjectPlayer then -- change to real ones
