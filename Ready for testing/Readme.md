@@ -24,7 +24,12 @@ require("custom/tutorialKills")
 require("custom/rageExp")
 ```
 
-Do the two "addbyHand" files + the copy to config
+Do the two "addbyHand" files
 
 add the recordstore and jsons to /data/
-add the menus to their folder and to config
+
+
+add menus
+
+
+config.menuHelperFiles = { "help", "defaultCrafting", "advancedExample", "progressmenu", "rage", "crafting", "fletching", "shopItems", "cannotLoot", "changeLog", "charGen", "charGenClothes", "chatMenu", "crafting", "craftingRecipes", "defaultCrafting", "fletchingRecipes", "help", "helpRagefire", "leatherMenu", "leatherRecipeMenu", "legendaryItemsMenu", "mainQuest", "menuguilds", "menuquest", "rageTest", "tailoring", "teleportMenu", "transporters", "tutorial" }
