@@ -194,19 +194,19 @@ end
 
 
 
-GroupParty.ShowMain = function(pid)
+GroupParty.ShowMain = function(pid, cmd)
 math.randomseed( os.time() )
 if GroupParty.IsParty(pid) then
 	GroupParty.ShowMembers(pid)
 else
-	tes3mp.CustomMessageBox(pid,5710,"Welcome to Party System.","Create Party;Join Party;Close")
+	tes3mp.CustomMessageBox(pid,guiHelper.ID.showmain,"Welcome to Party System.","Create Party;Join Party;Close")
 end
 
 end
 
 
 GroupParty.ShowCreateParty = function(pid)
-	tes3mp.InputDialog(pid,5720,"What name should the Party have?","")
+	tes3mp.InputDialog(pid,guiHelper.ID.createparty,"What name should the Party have?","")
 end
 
 
@@ -248,7 +248,7 @@ end
 	PartyList = PartyList.. "***CLOSE***"
 
 if realcount > 1 then
-	tes3mp.ListBox(pid,5730,"Choose Party",PartyList)
+	tes3mp.ListBox(pid,guiHelper.ID.joinparty,"Choose Party",PartyList)
 else
 	tes3mp.SendMessage(pid,"There are no party's currently available\n",false)
 end
@@ -262,7 +262,7 @@ if GroupParty.Partyexists(Players[OwnerPid].data.customVariables.PartyName) then
 	local PartyId = GroupParty.WhichParty(OwnerPid)
 		if Partytable[PartyId].name ~= nil then 
 			Players[OwnerPid].data.customVariables.WantsToJoinParty = joinpid
-			tes3mp.CustomMessageBox(OwnerPid,5731,Players[joinpid].name.." would like to join your party.","Yes;NO")
+			tes3mp.CustomMessageBox(OwnerPid,guiHelper.ID.acceptparty,Players[joinpid].name.." would like to join your party.","Yes;NO")
 		end
 end
 
@@ -306,7 +306,7 @@ end
 PartyList = PartyList.."LEAVE PARTY \n"
 PartyList = PartyList.. "***CLOSE***"
 if realcount > 1 then
-	tes3mp.ListBox(pid,5740,"Choose a Player to Kick or Leave Party",PartyList)
+	tes3mp.ListBox(pid,guiHelper.ID.showmembers,"Choose a Player to Kick or Leave Party",PartyList)
 else
 	tes3mp.SendMessage(pid,"There are no Members\n",false)
 end
@@ -342,7 +342,7 @@ end
 
 
 
-GroupParty.LeaveParty = function(pid)
+GroupParty.LeaveParty = function(eventStatus, pid)
 
 if GroupParty.IsParty(pid) then
 local PartyId = GroupParty.WhichParty(pid)
@@ -388,7 +388,7 @@ end
 ----------
 
 
-
+--[[ not used
 
 GroupParty.RandomGold = function(pid) -- think about saving, reloading inventory and equipment
 if GroupParty.IsParty(pid) then -- add party needs two
@@ -543,19 +543,23 @@ GroupParty.ProcessSkill = function(pid, linkedpid)
 					GroupParty.SendToParty(linkedpid, message)
 				end
 
-end
+end ]]--
 
 
-
-
+table.insert(guiHelper.names, "showmain")
+table.insert(guiHelper.names, "createparty")
+table.insert(guiHelper.names, "joinparty")
+table.insert(guiHelper.names, "acceptparty")
+table.insert(guiHelper.names, "showmembers")
+guiHelper.ID = tableHelper.enum(guiHelper.names)
 
 ----------------------------------
 --OnGUIAction
 --------
-GroupParty.OnGUIAction  = function(pid, idGui, data)
+GroupParty.OnGUIAction  = function(eventStatus, pid, idGui, data)
 
 
-if idGui == 5710 then --ShowMain
+if idGui == guiHelper.ID.showmain then --ShowMain
 	if tonumber(data) == 0 then
 		GroupParty.ShowCreateParty(pid)
 	elseif tonumber(data) == 1 then
@@ -563,20 +567,22 @@ if idGui == 5710 then --ShowMain
 	else 
 		return 
 	end
+customEventHooks.makeEventStatus(false, false)
 end
 
 
-if idGui == 5720 then --CreateParty
+if idGui == guiHelper.ID.createparty then --CreateParty
 	if data ~= "" then
 		GroupParty.CreateParty(pid,data)
 	else
 		tes3mp.SendMessage(pid, "Enter a valid Name\n",false)
 	end
+customEventHooks.makeEventStatus(false, false)
 end
 
 
 
-if idGui == 5730 then -- JoinParty
+if idGui == guiHelper.ID.joinparty then -- JoinParty
 	if tonumber(data) < GroupParty.GetLength(OptionsList[pid].data) then
 		local OwnerPid = OptionsList[pid].data[tonumber(data) + 1]
 		if Players[OwnerPid].data.customVariables.PartyName ~= nil then 
@@ -588,29 +594,32 @@ if idGui == 5730 then -- JoinParty
 	else
 		tes3mp.SendMessage(pid,"Exiting party menu\n",false)
 	end
+customEventHooks.makeEventStatus(false, false)
 end
 
 
-if idGui == 5731 then --accept party
+if idGui == guiHelper.ID.acceptparty then --accept party
 	if tonumber(data) == 0 then
 		GroupParty.JoinParty(pid, Players[pid].data.customVariables.PartyName,Players[pid].data.customVariables.WantsToJoinParty)
 	else
 		tes3mp.SendMessage(pid,"You refused the party request\n",false)
 	end
+customEventHooks.makeEventStatus(false, false)
 end
 
-if idGui == 5740 then -- showMembers
+if idGui == guiHelper.ID.showmembers then -- showMembers
 	if tonumber(data) < GroupParty.GetLength(OptionsList[pid].data) then
 		GroupParty.KickParty(pid, OptionsList[pid].data[tonumber(data) + 1])
 	elseif tonumber(data) == GroupParty.GetLength(OptionsList[pid].data)  then
-		GroupParty.LeaveParty(pid)
+		GroupParty.LeaveParty(false, pid)
 	else
 		tes3mp.SendMessage(pid,"You closed the Menu \n",false)
 	end
+customEventHooks.makeEventStatus(false, false)
 end
-
 
 end -- end OnGUIAction
 
-
-return GroupParty
+customCommandHooks.registerCommand("party", GroupParty.ShowMain)
+customEventHooks.registerValidator("OnGUIAction", GroupParty.OnGUIAction)
+customEventHooks.registerValidator("OnPlayerDisconnect", GroupParty.LeaveParty)

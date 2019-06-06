@@ -126,10 +126,23 @@ rageExp.Decide = function(eventStatus, pid, cellDescription)
 
 			if tes3mp.DoesActorHavePlayerKiller(0) then
 				local killerPid = tes3mp.GetActorKillerPid(0)
-			if LoadedCells[cellDescription].data.objectData[uniqueIndex] ~= nil then
+				
+			 if LoadedCells[cellDescription].data.objectData[uniqueIndex] ~= nil then
 				local refId = LoadedCells[cellDescription].data.objectData[uniqueIndex].refId
 
-                    rageExp.ProcessLatestKill(killerPid, refId)
+				if GroupParty.IsParty(killerPid) then
+					local CurrentCell = tes3mp.GetCell(killerPid)
+					local partyId = GroupParty.WhichParty(killerPid)
+					local nerfFactor = GroupParty.HowMuchPlayersInParty(partyId)
+					for i, p in pairs(Partytable[partyId].player) do
+						if tes3mp.GetCell(p.pd) == CurrentCell then
+							rageExp.ProcessLatestKillinParty(p.pd, refId, nerfFactor)
+						end
+					end
+				else
+					rageExp.ProcessLatestKill(killerPid, refId)
+				end
+						
              end
 			end
 end
