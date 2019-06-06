@@ -9,6 +9,7 @@ jsonInterface = require("jsonInterface")
 preexistingObjects = jsonInterface.load("preObjects.json")
 refNumDeletionsByCell = jsonInterface.load("refNumDeletionsByCell.json") -- check if this overrides
 
+
 preObjectsAndDeletions.FixCell = function(eventStatus, pid)
  
  cellDescription = tes3mp.GetCell(pid)
@@ -31,21 +32,132 @@ preObjectsAndDeletions.FixCell = function(eventStatus, pid)
 end
 
 
-preObjectsAndDeletions.AddPreexistingObjects = function(eventstatus, pid, cellDescription)
-   
-if LoadedCells[cellDescription]:HasEntry() ~= true then
+preObjectsAndDeletions.AddPreexistingObjects = function(eventStatus, pid, cellDescription)
+
+if Players[pid].LoadedCells == nil then Players[pid].LoadedCells = {} end
+if WorldInstance.data.LoadedCells == nil then WorldInstance.data.LoadedCells = {} end
+
+if preexistingObjects[cellDescription] ~= nil then
+
+if tableHelper.containsValue(Players[pid].LoadedCells, cellDescription) == false then
+	if WorldInstance.data.LoadedCells[cellDescription] == nil then
+	
+		WorldInstance.data.LoadedCells[cellDescription] = {}
+		
 -- only send preObjects to players entering cell later logicHandler line 419 change to false
-	 if preexistingObjects[cellDescription] ~= nil then
-	 
-			for arrayIndex, object in pairs(preexistingObjects[cellDescription]) do
-			   logicHandler.CreateObjectAtLocation(cellDescription, object.location, object.refId, object.packetType)
-			 
+	 		for arrayIndex, object in pairs(preexistingObjects[cellDescription]) do
+		
+			local uniqueIndex, mpNum = preObjectsAndDeletions.SpawnHelperForOne(pid, cellDescription, object.location, object.refId, object.packetType)
+			 print("\n LOADED CELL \n")
+			table.insert(WorldInstance.data.LoadedCells[cellDescription], {uniqueIndex = uniqueIndex, mpNum = mpNum})
 			end
 	 
 			LoadedCells[cellDescription].forceActorListRequest = true
-	  end
+			table.insert(Players[pid].LoadedCells, cellDescription)
+	--[[else -- no respawn since celldata gets respawn automatically
+		print("\n RELOADED CELL \n")
+		for _, object in pairs(WorldInstance,LoadedCells[cellDescription]) do
+			preObjectsAndDeletions.RespawnHelperForOne(pid, object.uniqueIndex, object.mpNum, cellDescription)
+		end
+			table.insert(Players[pid].LoadedCells, cellDescription)]]--
 	end
 end
+end
+end
+
+preObjectsAndDeletions.RespawnHelperForOne = function(pid, uniqueIndex, mpNum, cellDescription)
+--respawn object for player
+				local pid = pid
+				local refId = LoadedCells[cellDescription].data.objectData[uniqueIndex].refId
+				local location = LoadedCells[cellDescription].data.objectData[uniqueIndex].location
+				tes3mp.ClearObjectList()
+				tes3mp.SetObjectListPid(pid)
+				tes3mp.SetObjectListCell(cellDescription)
+				tes3mp.SetObjectRefId(refId)
+				tes3mp.SetObjectRefNum(0)
+				tes3mp.SetObjectMpNum(mpNum)
+				tes3mp.SetObjectCharge(-1)
+				tes3mp.SetObjectEnchantmentCharge(-1)
+				tes3mp.SetObjectPosition(location.posX, location.posY, location.posZ)
+				tes3mp.SetObjectRotation(location.rotX, location.rotY, location.rotZ)
+				tes3mp.AddObject()
+
+				if packetType == "place" then
+					tes3mp.SendObjectPlace(false)
+				elseif packetType == "spawn" then
+					tes3mp.SendObjectSpawn(false)
+				end
+end
+
+preObjectsAndDeletions.SpawnHelperForOne = function(pid, cellDescription, location, refId, packetType)
+	
+			local mpNum = WorldInstance:GetCurrentMpNum() + 1
+			local uniqueIndex =  0 .. "-" .. mpNum
+
+
+			-- Is this a generated record? If so, add a link to it in the cell it
+			-- has been placed in
+			if logicHandler.IsGeneratedRecord(refId) then
+				local recordStore = logicHandler.GetRecordStoreByRecordId(refId)
+
+				if recordStore ~= nil then
+					LoadedCells[cellDescription]:AddLinkToRecord(recordStore.storeType, refId, uniqueIndex)
+
+					-- Do any of the visitors to this cell lack the generated record?
+					-- If so, send it to them
+					for _, visitorPid in pairs(LoadedCells[cellDescription].visitors) do
+						recordStore:LoadGeneratedRecords(visitorPid, recordStore.data.generatedRecords, { refId })
+					end
+				else
+					tes3mp.LogMessage(enumerations.log.ERROR, "Attempt at creating object based on non-existent generated record")
+					return
+				end
+			end
+
+			WorldInstance:SetCurrentMpNum(mpNum)
+			tes3mp.SetCurrentMpNum(mpNum)
+
+			LoadedCells[cellDescription]:InitializeObjectData(uniqueIndex, refId)
+			LoadedCells[cellDescription].data.objectData[uniqueIndex].location = location
+
+			if packetType == "place" then
+				table.insert(LoadedCells[cellDescription].data.packets.place, uniqueIndex)
+			elseif packetType == "spawn" then
+				table.insert(LoadedCells[cellDescription].data.packets.spawn, uniqueIndex)
+				table.insert(LoadedCells[cellDescription].data.packets.actorList, uniqueIndex)
+			end
+
+			LoadedCells[cellDescription]:QuicksaveToDrive()
+
+			-- Are there any players on the server? If so, initialize the object
+			-- list for the first one we find and just send the corresponding packet
+			-- to everyone
+			if tableHelper.getCount(Players) > 0 then
+
+				local pid = pid
+				tes3mp.ClearObjectList()
+				tes3mp.SetObjectListPid(pid)
+				tes3mp.SetObjectListCell(cellDescription)
+				tes3mp.SetObjectRefId(refId)
+				tes3mp.SetObjectRefNum(0)
+				tes3mp.SetObjectMpNum(mpNum)
+				tes3mp.SetObjectCharge(-1)
+				tes3mp.SetObjectEnchantmentCharge(-1)
+				tes3mp.SetObjectPosition(location.posX, location.posY, location.posZ)
+				tes3mp.SetObjectRotation(location.rotX, location.rotY, location.rotZ)
+				tes3mp.AddObject()
+
+				if packetType == "place" then
+					tes3mp.SendObjectPlace(false)
+				elseif packetType == "spawn" then
+					tes3mp.SendObjectSpawn(false)
+				end
+			end
+
+			return uniqueIndex, mpNum
+	
+end
+
 
 preObjectsAndDeletions.DeleteCommand = function(pid, cmd)
 			-- Enables deletemode- activate object to delete it
