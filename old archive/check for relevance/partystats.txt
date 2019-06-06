@@ -1,6 +1,10 @@
+-- is implemented
+
+
 -- to see the current stats of PartyMembers
 --add to eventHandlers OnActivate Chain
 -- use https://github.com/Nkfree/Partyhealth
+
 if isObjectPlayer and GroupParty.IsParty(activatingPid) then 
     local activatedOne = tes3mp.GetObjectPid(index)
     local health = tostring(tes3mp.GetHealthCurrent(activatedOne))
