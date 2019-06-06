@@ -10,10 +10,11 @@ rageExp.rageCustomVariables = { "rageExp", "rageExpProgress", "rageLevel", "rage
 	
 	
 rageExp.Login = function(eventStatus, pid)
+if Players[pid].data.customVariables["ragePoints"] == nil then Players[pid].data.customVariables["ragePoints"] = 3 end
 
 for _, value in pairs(rageExp.rageCustomVariables) do
 if Players[pid].data.customVariables[value] == nil then
-	Players[pid].data.customVariables[value] = 1
+	Players[pid].data.customVariables[value] = 0
 end
 end
 end
@@ -133,5 +134,12 @@ rageExp.Decide = function(eventStatus, pid, cellDescription)
 			end
 end
 
+rageExp.Help = function(pid, cmd)
+        -- Check "scripts/menu/help.lua" if you want to change the contents of the help menus
+        Players[pid].currentCustomMenu = "ragefire help"
+        menuHelper.DisplayMenu(pid, Players[pid].currentCustomMenu)
+end
+		
+customCommandHooks.registerCommand("help", rageExp.Help)
 customEventHooks.registerHandler("OnActorDeath", rageExp.Decide)
 customEventHooks.registerHandler("OnPlayerConnect", rageExp.Login)

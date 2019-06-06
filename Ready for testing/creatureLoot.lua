@@ -3,19 +3,19 @@
 creatureLoot = {}
 
 
-creatureLoot = function(eventStatus, pid, cellDescription) -- put OnWorldKillCount
+creatureLoot.ProcessLatestKill = function(pid, refId, uniqueIndex) -- put OnWorldKillCount... false .. put OnActorDeath
 
 local cellDescription = tes3mp.GetCell(pid)
-local refId = tes3mp.GetKillRefId(pid, tes3mp.GetKillChangesSize(pid) - 1)
 
-if refId == "skeleton champion"  and tes3mp.GetCell(pid) == "Indalen Ancestral Tomb" then
-	local actorIndex = tes3mp.GetActorListSize() - 1
-	local uniqueIndex = tes3mp.GetActorRefNum(actorIndex) .. "-" .. tes3mp.GetActorMpNum(actorIndex)
+if refId == "skeleton warrior"  and cellDescription == "Indalen Ancestral Tomb" then
+	
 	
 			if LoadedCells[cellDescription].data.objectData[uniqueIndex].inventory == nil then
-				LoadedCells[cellDescription].data.objectData[uniqueIndex].inventory = {"gold_001",100}
+				LoadedCells[cellDescription].data.objectData[uniqueIndex].inventory = {{refId = "iron_shield", count = 1, charge = 200}, {refId = "gold_001", count = 1000, charge = 0}}
+				
 			else
-				LoadedCells[cellDescription].data.objectData[uniqueIndex].inventory = {"gold_001",50}
+				table.insert(LoadedCells[cellDescription].data.objectData[uniqueIndex].inventory,  {refId = "iron_shield", count = 1, charge = 200})
+				table.insert(LoadedCells[cellDescription].data.objectData[uniqueIndex].inventory, {refId = "gold_001", count = 1000, charge = 0})
 			end
 			
 			
@@ -34,5 +34,23 @@ if refId == "skeleton champion"  and tes3mp.GetCell(pid) == "Indalen Ancestral T
 end
 end
 
-customEventHooks.registerHandler("OnActorDeath", creatureLoot)
+
+creatureLoot.Decide = function(eventStatus, pid, cellDescription)
+
+        local uniqueIndex = tes3mp.GetActorRefNum(0) .. "-" .. tes3mp.GetActorMpNum(0)
+
+			if tes3mp.DoesActorHavePlayerKiller(0) then -- rly necessary ?
+				local killerPid = tes3mp.GetActorKillerPid(0)
+				if LoadedCells[cellDescription].data.objectData[uniqueIndex] ~= nil then
+					local refId = LoadedCells[cellDescription].data.objectData[uniqueIndex].refId
+
+						creatureLoot.ProcessLatestKill(killerPid, refId, uniqueIndex)
+				else
+				 tes3mp.LogMessage(2, "objectData was nil with this one")
+				end
+			end
+end
+
+
+customEventHooks.registerHandler("OnActorDeath", creatureLoot.Decide)
 

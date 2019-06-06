@@ -8,7 +8,7 @@ soultax = {}
 
 soultax = function(EventStatus, pid)
 				
-		
+		self = Players[pid]
     local action = tes3mp.GetInventoryChangesAction(self.pid)
     local itemChangesCount = tes3mp.GetInventoryChangesSize(self.pid)
 
