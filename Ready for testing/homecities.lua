@@ -434,6 +434,16 @@ function OnFeatherTimeExpiration(pid)
     end
 end
 
+
+homecities.OnFinishLogin = function(eventStatus, pid)
+-- feather buff
+		logicHandler.RunConsoleCommandOnPlayer(self.pid, "removespell home_feather")
+		logicHandler.RunConsoleCommandOnPlayer(self.pid, "removespell hide")
+		if self.data.customVariables.currentRageLevel == nil then
+			self.data.customVariables.currentRageLevel = 1
+		end
+end		
+		
 homecities.cmd = function(pid, cmd)
 
 					if Players[pid].data.customVariables.homeTutorial == nil or Players[pid].data.customVariables.homeTutorial == false then
@@ -484,13 +494,39 @@ end
 	
 
 		
-		
+homecities.teleportAfterRegister = function(eventStatus, pid)
+-- Home Cities
+	  if self.data.homecity ~= nil and config.homecitySpawns[self.data.homecity] ~= nil then
 
+        local homecitySpawn = config.homecitySpawns[self.data.homecity]
+
+			tes3mp.SetCell(self.pid, homecitySpawn.cell)
+			tes3mp.SendCell(self.pid)
+
+			 if config.defaultSpawnPos ~= nil and config.defaultSpawnRot ~= nil then
+            tes3mp.SetPos(self.pid, homecitySpawn.pos[1], homecitySpawn.pos[2], homecitySpawn.pos[3])
+            tes3mp.SetRot(self.pid, homecitySpawn.rot[1], homecitySpawn.rot[2])
+            tes3mp.SendPos(self.pid)
+        end   
+
+		elseif config.defaultSpawnCell ~= nil then
+
+			tes3mp.SetCell(self.pid, config.defaultSpawnCell)
+			tes3mp.SendCell(self.pid)
+
+			if config.defaultSpawnPos ~= nil and config.defaultSpawnRot ~= nil then
+				tes3mp.SetPos(self.pid, config.defaultSpawnPos[1], config.defaultSpawnPos[2], config.defaultSpawnPos[3])
+				tes3mp.SetRot(self.pid, config.defaultSpawnRot[1], config.defaultSpawnRot[2])
+				tes3mp.SendPos(self.pid)
+			end
+		end
+end
 
 
 customEventHooks.registerHandler("OnPlayerResurrect", homecities.finish)
 customCommandHooks.registerCommand("home", homecities.cmd)
-
+customEventHooks.registerHandler("OnPlayerFinishLogin", homecities.OnFinishLogin)
+customEventHooks.registerHandler("OnPlayerEndCharGen", homecities.teleportAfterRegister)
 
 
 --[[

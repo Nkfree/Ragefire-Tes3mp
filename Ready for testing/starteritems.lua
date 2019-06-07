@@ -30,6 +30,6 @@ starteritems.OnPlayerEndCharGen = function(eventStatus, pid)
         menuHelper.DisplayMenu(pid, Players[pid].currentCustomMenu)
     end
 end
-
+-- calls also the choose homecity menus etc .. 
 
 customEventHooks.registerHandler("OnPlayerEndCharGen", starteritems.OnPlayerEndCharGen)
