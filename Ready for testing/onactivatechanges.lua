@@ -46,7 +46,7 @@ if isObjectPlayer == true then
 -- add to eventHandlers OnActivate Chain
 			activatingPid = players[1].activatingPid
 
-				--if GroupParty.IsParty(activatingPid) then 
+				if GroupParty.IsParty(activatingPid) then 
 					local activatedOne = players[1].pid
 					local health = tostring(tes3mp.GetHealthCurrent(activatedOne))
 					local magicka = tostring(tes3mp.GetMagickaCurrent(activatedOne))
@@ -63,7 +63,7 @@ if isObjectPlayer == true then
 					List = List .. color.White .. "Current Magicka: " .. color.RoyalBlue .. math.floor(magicka / maxMagicka * 100) .. "%\n"
 					List = List .. color.White .. "Current Fatigue: " .. color.LightGreen .. math.floor(fatigue / maxFatigue * 100) .. "%\n"
 					tes3mp.MessageBox(activatingPid,-1,List)
-				--end
+				end
 				
 else
 		--necessary vars

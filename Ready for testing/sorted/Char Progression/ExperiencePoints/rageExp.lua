@@ -10,13 +10,13 @@ rageExp.rageCustomVariables = { "rageExp", "rageExpProgress", "rageLevel", "rage
 	
 	
 rageExp.Login = function(eventStatus, pid)
-if Players[pid].data.customVariables["ragePoints"] == nil then Players[pid].data.customVariables["ragePoints"] = 3 end
+	if Players[pid].data.customVariables["ragePoints"] == nil then Players[pid].data.customVariables["ragePoints"] = 3 end
 
-for _, value in pairs(rageExp.rageCustomVariables) do
-if Players[pid].data.customVariables[value] == nil then
-	Players[pid].data.customVariables[value] = 0
-end
-end
+	for _, value in pairs(rageExp.rageCustomVariables) do
+		if Players[pid].data.customVariables[value] == nil then
+			Players[pid].data.customVariables[value] = 0
+		end
+	end
 end
 
 rageExp.ProcessLatestKill = function(pid, refId)

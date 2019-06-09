@@ -507,7 +507,7 @@ homecities.teleportAfterRegister = function(eventStatus, pid)
             tes3mp.SetPos(self.pid, homecitySpawn.pos[1], homecitySpawn.pos[2], homecitySpawn.pos[3])
             tes3mp.SetRot(self.pid, homecitySpawn.rot[1], homecitySpawn.rot[2])
             tes3mp.SendPos(self.pid)
-        end   
+			end   
 
 		elseif config.defaultSpawnCell ~= nil then
 
