@@ -437,6 +437,7 @@ end
 
 homecities.OnFinishLogin = function(eventStatus, pid)
 -- feather buff
+self = Players[pid]
 		logicHandler.RunConsoleCommandOnPlayer(self.pid, "removespell home_feather")
 		logicHandler.RunConsoleCommandOnPlayer(self.pid, "removespell hide")
 		if self.data.customVariables.currentRageLevel == nil then
@@ -496,6 +497,7 @@ end
 		
 homecities.teleportAfterRegister = function(eventStatus, pid)
 -- Home Cities
+self = Players[pid]
 	  if self.data.homecity ~= nil and config.homecitySpawns[self.data.homecity] ~= nil then
 
         local homecitySpawn = config.homecitySpawns[self.data.homecity]

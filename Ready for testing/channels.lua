@@ -2,7 +2,7 @@
 
             --in function OnPlayerSendMessage in eventHandler.lua
             --replace tes3mp.SendMessage(pid, message, true) with 
-            
+channels = {}
 channels.message = function(eventStatus, pid, message)
 
 			if message:sub(1, 1) == '/' then
