@@ -6,7 +6,7 @@
 				
 soultax = {}
 
-soultax = function(EventStatus, pid)
+soultax = function(eventStatus, pid)
 
 if eventStatus.validCustomHandlers then --check if some other script made this event obsolete
 		self = Players[pid]
