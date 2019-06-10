@@ -15,13 +15,13 @@ require("custom/kickping")
 require("custom/legendaryItems")
 require("custom/meditate")
 require("custom/onactivatechanges")
-require("custom/preObjectsAndDeletions")
+-- require("custom/preObjectsAndDeletions") -- preObjects.json -- refNumDeletionsByCell.json
 require("custom/racialbonuses")
 require("custom/rage_cmd")
 require("custom/russiannames")
 require("custom/soultax")
 require("custom/tutorialKills")
-require("custom/rageExp")
+require("custom/rageExp") -- rageExp.json
 require("custom/channels")
 require("custom/GroupParty")
 require("custom/MainQuestRequiredKills")
@@ -48,10 +48,15 @@ config.menuHelperFiles = { "help", "defaultCrafting", "advancedExample", "rage",
 Add to the mix
 ```
 
-kanaHousing
-kanaFurniture
-kanaRevive
-kanaCellReset (change to delete loadedCells and kills) (load preObjects after cellreset)
+kanaBank = require("custom/kanaBank")
+decorateHelp = require("custom/decorateHelp")
+kanaFurniture = require("custom/kanaFurniture")
+kanaHousing = require("custom/kanaHousing")
+CellReset = require("custom/CellReset") -- (change to delete loadedCells and kills) (add exemptions list from kanaHousing)
+require("custom/preObjectsAndDeletions") -- (load after cellreset)
+
+
+kanaRevive -- needs customHooks
 kanaStorage
 MarketPlace Alternative
 
