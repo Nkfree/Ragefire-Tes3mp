@@ -216,6 +216,7 @@ config.allowOnContainerForUnloadedCells = true
 
 JersServerMarket.OnGUIAction = function(eventStatus, pid, idGui, data)
 
+if eventStatus.validCustomHandlers then --check if some other script made this event obsolete
             if idGui == 1200 then -- gui sell
                 
                 local enteredPrice = tonumber(data)
@@ -411,12 +412,15 @@ JersServerMarket.OnGUIAction = function(eventStatus, pid, idGui, data)
                 end
 			end	
 end
+end
 				
 				
 				
 -------In eventHandler.lua in the OnGUIAction function after Players[pid]:Message("You have successfully logged in.\n") add this-------
 -- display how much they earned while offline
 JersServerMarket.finishLogin = function(eventStatus, pid)
+
+if eventStatus.validCustomHandlers then --check if some other script made this event obsolete
                     if WorldInstance.data.market ~= nil and
                     WorldInstance.data.market.earnedOffline ~= nil and
                     WorldInstance.data.market.earnedOffline[Players[pid].data.login.name] ~= nil then
@@ -424,6 +428,7 @@ JersServerMarket.finishLogin = function(eventStatus, pid)
                         WorldInstance.data.market.earnedOffline[Players[pid].data.login.name] = nil
                         WorldInstance:Save()
                     end
+end
 end
 
 customEventHooks.registerHandler("OnPlayerFinishLogin", JersServerMarket.finishLogin)

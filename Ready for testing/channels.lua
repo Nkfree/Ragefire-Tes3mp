@@ -37,7 +37,10 @@ channels.message = function(eventStatus, pid, message)
 end			
             --place at beginning of function OnPlayerConnect in serverCore
 channels.connect = function(eventStatus, pid)
+
+if eventStatus.validCustomHandlers then --check if some other script made this event obsolete
             Players[pid].data.customVariables.ChatChannel = 1
+end
 end
 
             --make command in cmdChain

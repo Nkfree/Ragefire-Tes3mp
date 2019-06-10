@@ -37,6 +37,7 @@ end
 
 creatureLoot.Decide = function(eventStatus, pid, cellDescription)
 
+if eventStatus.validCustomHandlers then --check if some other script made this event obsolete
         local uniqueIndex = tes3mp.GetActorRefNum(0) .. "-" .. tes3mp.GetActorMpNum(0)
 
 			if tes3mp.DoesActorHavePlayerKiller(0) then -- rly necessary ?
@@ -49,6 +50,7 @@ creatureLoot.Decide = function(eventStatus, pid, cellDescription)
 				 tes3mp.LogMessage(2, "objectData was nil with this one")
 				end
 			end
+end
 end
 
 

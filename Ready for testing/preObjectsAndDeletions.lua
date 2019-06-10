@@ -12,6 +12,8 @@ refNumDeletionsByCell = jsonInterface.load("refNumDeletionsByCell.json") -- chec
 
 preObjectsAndDeletions.FixCell = function(eventStatus, pid)
  
+if eventStatus.validCustomHandlers then --check if some other script made this event obsolete
+
  cellDescription = tes3mp.GetCell(pid)
  
     if refNumDeletionsByCell[cellDescription] ~= nil then
@@ -30,9 +32,12 @@ preObjectsAndDeletions.FixCell = function(eventStatus, pid)
         tes3mp.SendObjectDelete()
     end
 end
+end
 
 
 preObjectsAndDeletions.AddPreexistingObjects = function(eventStatus, pid, cellDescription)
+
+if eventStatus.validCustomHandlers then --check if some other script made this event obsolete
 
 if Players[pid].LoadedCells == nil then Players[pid].LoadedCells = {} end
 if WorldInstance.data.LoadedCells == nil then WorldInstance.data.LoadedCells = {} end
@@ -61,6 +66,7 @@ if tableHelper.containsValue(Players[pid].LoadedCells, cellDescription) == false
 		end
 			table.insert(Players[pid].LoadedCells, cellDescription)]]--
 	end
+end
 end
 end
 end
@@ -173,6 +179,9 @@ preObjectsAndDeletions.OffDeleteCommand = function(pid, cmd)
 end
 
 preObjectsAndDeletions.OnObjectActivate = function(eventStatus, pid, cellDescription, objects, players)
+
+if eventStatus.validCustomHandlers then --check if some other script made this event obsolete
+
             if Players[pid].data.deletemode ~= nil and Players[pid].data.deletemode == true then -- disables all activations and adds them to refnumdeletions
                 isValid = false
                 
@@ -189,7 +198,8 @@ preObjectsAndDeletions.OnObjectActivate = function(eventStatus, pid, cellDescrip
                 
                 jsonInterface.save("refNumDeletionsByCell.json", refNumDeletionsByCell)
                 tes3mp.SendMessage(pid, "Deleted refNum: " .. tes3mp.GetObjectRefNum(index) .. "\n", false)
-	end
+			end
+end
 end
 
 

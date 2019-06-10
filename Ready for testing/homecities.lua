@@ -437,12 +437,15 @@ end
 
 homecities.OnFinishLogin = function(eventStatus, pid)
 -- feather buff
+
+if eventStatus.validCustomHandlers then --check if some other script made this event obsolete
 self = Players[pid]
 		logicHandler.RunConsoleCommandOnPlayer(self.pid, "removespell home_feather")
 		logicHandler.RunConsoleCommandOnPlayer(self.pid, "removespell hide")
 		if self.data.customVariables.currentRageLevel == nil then
 			self.data.customVariables.currentRageLevel = 1
 		end
+end
 end		
 		
 homecities.cmd = function(pid, cmd)
@@ -496,6 +499,8 @@ end
 
 		
 homecities.teleportAfterRegister = function(eventStatus, pid)
+
+--if eventStatus.validCustomHandlers then --leave it out this time since we using this function again with "nil"
 -- Home Cities
 self = Players[pid]
 	  if self.data.homecity ~= nil and config.homecitySpawns[self.data.homecity] ~= nil then

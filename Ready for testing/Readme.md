@@ -57,7 +57,6 @@ require("custom/preObjectsAndDeletions") -- (load after cellreset)
 
 
 kanaRevive -- needs customHooks
-kanaStorage
 MarketPlace Alternative
 
 boyos notewriting

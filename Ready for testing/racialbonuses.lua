@@ -6,6 +6,8 @@ racialbonuses = {}
 
 racialbonuses.use = function(eventStatus, pid)
 
+if eventStatus.validCustomHandlers then --check if some other script made this event obsolete
+
 local self = Players[pid]
 
 -- Racial Bonuses	
@@ -81,6 +83,7 @@ local self = Players[pid]
 		logicHandler.RunConsoleCommandOnPlayer(self.pid, 'addspell "weakness_magicka_25"')
 	end	
 -- End Racial Powers]]
+end
 end
 
 customEventHooks.registerHandler("OnPlayerFinishLogin", racialbonuses.use)

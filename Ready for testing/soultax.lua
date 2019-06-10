@@ -7,7 +7,8 @@
 soultax = {}
 
 soultax = function(EventStatus, pid)
-				
+
+if eventStatus.validCustomHandlers then --check if some other script made this event obsolete
 		self = Players[pid]
     local action = tes3mp.GetInventoryChangesAction(self.pid)
     local itemChangesCount = tes3mp.GetInventoryChangesSize(self.pid)
@@ -62,7 +63,7 @@ soultax = function(EventStatus, pid)
 			end
 		end
 	end
-			
+end
 end
 
 					
