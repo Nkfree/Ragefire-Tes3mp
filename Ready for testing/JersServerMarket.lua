@@ -1,7 +1,3 @@
---- JerTheBear server market
--- hooked up by discordpeter
-
-
 -------In data\recordstore\creature.json this needs to be added to the permanent records-------
 --[[
   "permanentRecords":{
@@ -77,13 +73,28 @@ end
 			
 -------In cell\base.lua in the SaveContainers function after the local itemSoul add this-------
 JersServerMarket.onContainer = function(eventStatus, pid, cellDescription, objects)
-			objectIndex = 0
-			itemIndex = 0 
+
+--print("before this")
 			
-			local uniqueIndex = tes3mp.GetObjectRefNum(objectIndex) .. "-" .. tes3mp.GetObjectMpNum(objectIndex)
-            
+
+    tes3mp.ReadReceivedObjectList()
+    tes3mp.CopyReceivedObjectListToStore()
+	
+    local packetOrigin = tes3mp.GetObjectListOrigin()
+    local action = tes3mp.GetObjectListAction()
+    local subAction = tes3mp.GetObjectListContainerSubAction()
+
+    for objectIndex = 0, tes3mp.GetObjectListSize() - 1 do
+
+        local uniqueIndex = tes3mp.GetObjectRefNum(objectIndex) .. "-" .. tes3mp.GetObjectMpNum(objectIndex)
+        local refId = tes3mp.GetObjectRefId(objectIndex)
+		
+        for itemIndex = 0, tes3mp.GetContainerChangesSize(objectIndex) - 1 do
+			
+			--print("after this")
+			
             if WorldInstance.data.market ~= nil and uniqueIndex == WorldInstance.data.market.marketId then
-				print("inside")
+				--print("inside")
 				
 				local subAction = tes3mp.GetObjectListContainerSubAction()
 				if subAction == enumerations.containerSub.TAKE_ALL then
@@ -192,7 +203,11 @@ JersServerMarket.onContainer = function(eventStatus, pid, cellDescription, objec
                     tes3mp.CustomMessageBox(pid,1201,buyLabel,"Accept;Cancel")
                 end
                 return customEventHooks.makeEventStatus(false, false)
-            end			
+            end				
+		end
+	end
+	
+return customEventHooks.makeEventStatus(true, true)		
 end
 			
 
@@ -419,7 +434,6 @@ end
 -------In eventHandler.lua in the OnGUIAction function after Players[pid]:Message("You have successfully logged in.\n") add this-------
 -- display how much they earned while offline
 JersServerMarket.finishLogin = function(eventStatus, pid)
-
 if eventStatus.validCustomHandlers then --check if some other script made this event obsolete
                     if WorldInstance.data.market ~= nil and
                     WorldInstance.data.market.earnedOffline ~= nil and
