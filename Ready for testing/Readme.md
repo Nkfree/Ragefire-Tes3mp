@@ -57,7 +57,7 @@ require("custom/preObjectsAndDeletions") -- (load after cellreset)
 
 
 kanaRevive -- needs customHooks
-MarketPlace Alternative
+JerTheBears MarketPlace (ported)
 
 boyos notewriting
 boyos dungeonloot
