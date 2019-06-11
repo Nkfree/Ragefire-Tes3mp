@@ -57,7 +57,7 @@ require("custom/preObjectsAndDeletions") -- (load after cellreset)
 
 
 kanaRevive -- needs customHooks
-JerTheBears MarketPlace (ported)
+JerTheBears MarketPlace (ported) (add cell to cellreset blacklist)
 
 boyos notewriting
 boyos dungeonloot
