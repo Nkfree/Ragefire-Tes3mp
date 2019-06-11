@@ -216,7 +216,7 @@ if eventStatus.validCustomHandlers then --check if some other script made this e
                     -- Are we in a cell where the monsters should be buffed?
                     if tableHelper.containsValue(cellsForMonsterBuffs[locationalMonsterBuff], tes3mp.GetCell(pid)) then
                         local actorList = LoadedCells[cell].data.packets.actorList
-                        logicHandler.RunConsoleCommandOnObjectsForPlayer(pid, "addspell " .. locationalMonsterBuff, cell, actorList)
+                        logicHandler.RunConsoleCommandOnObjects(pid, "addspell " .. locationalMonsterBuff, cell, actorList)
                     end
                 end
 
