@@ -86,4 +86,5 @@ local self = Players[pid]
 end
 end
 
+customEventHooks.registerHandler("OnPlayerEndCharGen", racialbonuses.use)
 customEventHooks.registerHandler("OnPlayerFinishLogin", racialbonuses.use)
