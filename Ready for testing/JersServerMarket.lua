@@ -89,12 +89,13 @@ JersServerMarket.onContainer = function(eventStatus, pid, cellDescription, objec
         local uniqueIndex = tes3mp.GetObjectRefNum(objectIndex) .. "-" .. tes3mp.GetObjectMpNum(objectIndex)
         local refId = tes3mp.GetObjectRefId(objectIndex)
 		
-        for itemIndex = 0, tes3mp.GetContainerChangesSize(objectIndex) - 1 do
+		if WorldInstance.data.market ~= nil and uniqueIndex == WorldInstance.data.market.marketId then
+			
+			for itemIndex = 0, tes3mp.GetContainerChangesSize(objectIndex) - 1 do
 			
 			--print("after this")
 			
-            if WorldInstance.data.market ~= nil and uniqueIndex == WorldInstance.data.market.marketId then
-				--print("inside")
+            	--print("inside")
 				
 				local subAction = tes3mp.GetObjectListContainerSubAction()
 				if subAction == enumerations.containerSub.TAKE_ALL then
@@ -202,8 +203,9 @@ JersServerMarket.onContainer = function(eventStatus, pid, cellDescription, objec
                     buyLabel = buyLabel .. "Buy for " .. price
                     tes3mp.CustomMessageBox(pid,1201,buyLabel,"Accept;Cancel")
                 end
-                return customEventHooks.makeEventStatus(false, false)
-            end				
+            
+			end				
+                return customEventHooks.makeEventStatus(false, false) -- return here in hope we only got one object for this
 		end
 	end
 	
