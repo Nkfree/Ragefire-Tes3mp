@@ -16,7 +16,7 @@ if eventStatus.validCustomHandlers then --check if some other script made this e
     tes3mp.LogMessage(enumerations.log.INFO, "Saving " .. itemChangesCount .. " item(s) to inventory with action " ..
         tableHelper.getIndexByValue(enumerations.inventory, action))
 
-    if action == enumerations.inventory.SET then self.data.inventory = {} end
+    --if action == enumerations.inventory.SET then self.data.inventory = {} end
 
     for index = 0, itemChangesCount - 1 do
         local itemRefId = tes3mp.GetInventoryItemRefId(self.pid, index)
@@ -60,10 +60,29 @@ if eventStatus.validCustomHandlers then --check if some other script made this e
                             "transaction due to the soul gem tax.")
                     end
 				end
+			elseif action == enumerations.inventory.REMOVE then
+
+                --[[ Start of Ragefire addition ]]
+                -- Track the latest item removals for this player, or clear them if more than 2 seconds
+                -- have passed
+                if self.lastItemsRemoved == nil then self.lastItemsRemoved = {} end
+                if self.lastItemsRemovedTime == nil then self.lastItemsRemovedTime = os.time() end
+
+                if os.time() - self.lastItemsRemovedTime > 2 then
+                    self.lastItemsRemoved = {}
+                end
+                
+                table.insert(self.lastItemsRemoved, item)
+                self.lastItemsRemovedTime = os.time()
+
+                self.lastItemsRemovedTime = os.time()
+                --[[ End of Ragefire addition ]]
+				
 			end
 		end
 	end
 end
+			
 end
 
 					

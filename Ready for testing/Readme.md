@@ -38,7 +38,9 @@ Do the two "addbyHand" files
 add the recordstore and jsons to /data/
 
 
-add menus (change "chargen" menu to teleport at the end)
+add menus 
+(change "chargen" menu to teleport at the end)
+(remove endchargen from "chargen" menu)
 
 ```
 config.menuHelperFiles = { "help", "defaultCrafting", "advancedExample", "rage", "crafting", "fletching", "shopItems", "cannotLoot", "changeLog", "charGen", "charGenClothes", "chatMenu", "crafting", "craftingRecipes", "defaultCrafting", "fletchingRecipes", "help", "helpRagefire", "leatherMenu", "leatherRecipeMenu", "legendaryItemsMenu", "mainQuest", "menuguilds", "menuquest", "rageTest", "tailoring", "teleportMenu", "transporters", "tutorial" }
