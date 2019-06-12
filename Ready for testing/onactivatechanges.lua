@@ -91,10 +91,13 @@ else
 			refId = objects[1].refId
 
  -- house block				
-				if not tableHelper.containsValue(doorTable, refId) and Players[pid].data.isInOwnedHouse == true then
+				if not tableHelper.containsValue(doorTable, refId) and not kanaHousing.IsOwner(Players[activatingPid].name, cellDescription) then -- in hope cellDescription is house name
 					isValid = false
 
 				end
+				--[[
+				In kanaHousing change onObjectDelete to validator and return false
+				]]
 -- sneak block  
 				if tes3mp.GetSneakState(activatingPid) and cellDescription == "ToddTest" then
 					isValid = false
