@@ -27,20 +27,29 @@ onactivatechanges = {}
  
  
 onactivatechanges.Activate = function(eventStatus, pid, cellDescription, objects, players)
-
-doesObjectHaveActivatingPlayer = true  -- can this be different?
+-- later take care of multiple objects
+doesObjectHaveActivatingPlayer = true  -- can this be different? yep it can
 
 isValid = true
 
 if players[1] ~= nil then 
-	isObjectPlayer = true 
-end -- activated object is a player
+	isObjectPlayer = true -- activated object is a player
+else
+	if objects[1] == nil then -- maybe through multiple objects we got 1 is nil .. take care of that later
+				return customEventHooks.makeEventStatus(isValid,isValid)
+	end
+end
+		
 
 
 
 
 
 if isObjectPlayer == true then
+	if players[1].activatingPid == nil then 
+		doesObjectHaveActivatingPlayer = false
+		return customEventHooks.makeEventStatus(isValid,isValid)
+	end
 -- party commands
 -- to see the current stats of PartyMembers
 -- add to eventHandlers OnActivate Chain
@@ -66,7 +75,11 @@ if isObjectPlayer == true then
 				end
 				
 else
-		--necessary vars
+	if objects[1].activatingPid == nil then 
+		doesObjectHaveActivatingPlayer = false
+		return customEventHooks.makeEventStatus(isValid,isValid)
+	end		
+			--necessary vars
 				index = 0 -- should be useless 
 			activatingPid = objects[1].activatingPid
 
