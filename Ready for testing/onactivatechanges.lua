@@ -89,12 +89,17 @@ else
 				ObjectMpNum = splitIndex[2]
 
 			refId = objects[1].refId
-
+			
  -- house block				
-				if not tableHelper.containsValue(doorTable, refId) and not kanaHousing.IsOwner(Players[activatingPid].name, cellDescription) then -- in hope cellDescription is house name
-					isValid = false
-
-				end
+                local houseName, cdata = kanaHousing.GetIsInHouse(activatingPid)
+                    	
+                if houseName then -- The player isn't in a house cell, so we don't care
+                    	if kanaHousing.GetHouseOwnerName(houseName) then -- the house got an owner
+            				if not tableHelper.containsValue(doorTable, refId) and not kanaHousing.IsOwner(Players[activatingPid].name, houseName) and not kanaHousing.IsCoOwner(Players[activatingPid].name, houseName) then
+            					isValid = false
+            				end
+        			    end
+    		    end
 				--[[
 				In kanaHousing change onObjectDelete to validator and return false
 				]]
