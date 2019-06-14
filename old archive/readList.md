@@ -29,7 +29,36 @@ where \[status\] is the functional state and (dependencies) if there are needed 
 &#x200B;
 
 # List
-
+* \[0.7.0-alpha] [fully functional] [Graphic Herbalismn outdated](https://github.com/rnate/TES3MP-GraphicHerbalism-Outdated) - () - [rnate](https://github.com/rnate)
+* Due to them relying on global player variables, none of the popular 'Graphic Herbalism' mods work in TES3MP. This transfers it to a server script, so it can run without issue.
+* \[0.7.0-alpha] [fully functional] [Jers Server Market](https://github.com/Jerthebear/Tes3mp-Scripts/blob/master/Jer's%20Server%20Market%20Install.txt) - () - [JerTheBear](https://github.com/Jerthebear/)
+* Server Market to trade goods between players relying on Containers
+* \[0.7.0-alpha] [fully functional] [Jers Storage Void](https://github.com/Jerthebear/Tes3mp-Scripts/blob/master/Void%20Storage%20Install.txt) - () - [JerTheBear](https://github.com/Jerthebear/)
+* Storage Solution. You can put items in a container callable via command
+* \[0.7.0-alpha] [fully functional] [tes3mp-player-cells](https://github.com/NicholasAH/tes3mp-player-cells) - () - [NicholasAh](https://github.com/NicholasAH/)
+* This gives mods the ability to give players their own cells, where they can whitelist and unwhitelist it, and add whitelisted people. It was made afterplayer-ran stores would get robbed when players were offline.
+* \[0.7.0-alpha] [fully functional] [tes3mp_Scriptloader](https://github.com/SaintWish/tes3mp_scriptloader) - (wishbone loader) - [SaintWish](https://github.com/SaintWish/)
+* The script loader makes it much easier and cleaner to install scripts and remove them
+* \[0.7.0-alpha] [fully functional] [resurrectActors](https://github.com/perfectcolors/tes3mp-scripts/tree/master/resurrectActors) - () - [perfectcolors](https://github.com/perfectcolors/)
+* This script issues a resurrect command on actors in a user-defined list when a player loads a cell after a specified period of time.
+* \[0.7.0-alpha] [fully functional] [PartyHealth](https://github.com/Nkfree/Partyhealth)- () - [Nkfree](https://github.com/Nkfree)
+* You can add another Player into your Friendlist. Then if Friend1 'Activates' Friend2 he gets continuous update of Friend2's health as GUI or CHAT message.
+* \[0.7.0-alpha] [fully functional] [HelpHelper](https://github.com/Nkfree/helpHelper)- () - [Nkfree](https://github.com/Nkfree)
+* Make single help menus using one function and few variables.
+* \[0.7.0-alpha] [fully functional] [bookAssist](https://github.com/buntnessel/tes3mp_bookAssist) - () - [buntnessel](https://github.com/buntnessel/)
+* A morrowind-multiplayer/TEs3mp script implementing some of Book Rotates functionality for placing books vertically serverside
+* \[0.7.0-alpha] [fully functional] [BountyBoard](https://github.com/quickstraw/tes3mp-scripts/tree/master/Bounty%20Board) - () - [quickstraw](https://github.com/quickstraw/)
+* Adds a bounty command which displays a sorted list of active players and their bounties.
+* \[0.7.0-alpha] [fully functional] [Criminals](https://github.com/quickstraw/tes3mp-scripts/tree/master/Criminals/ScriptLoader) - ([saints script loader](https://github.com/SaintWish/tes3mp_scriptloader)) - [quickstraw](https://github.com/quickstraw/)
+* This is a lua script for tes3mp based on Skvysh's Criminals script. I fixed the script to run correctly and hopefully without bugs. There is also a script loader compatible version which works with SaintWish's script loader which makes script installation a lot cleaner.
+* \[0.6.x] [fully functional] [tes3mp-jail](https://github.com/Xenkhan/tes3mp-jail) - () - [xenkhan](https://github.com/Xenkhan/)
+* 0.6.X solution to jailing players with actual time.
+* \[0.7.0-alpha] [WIP] [DiscordRelay](https://github.com/MrFlutters/TES3MP_DiscordRelay) - () - [MrFlutters](https://github.com/MrFlutters)
+* Discord Relay for TES3MP 0.7.0 (Webhook Branch)
+* \[0.7.0-alpha] [WIP] [Deathmatch](https://github.com/testman42/tes3mp-deathmatch) - () - [testman42](https://github.com/testman42/)
+* Deathmatch and Team Deathmatch for TES3MP 0.7.0-alpha.
+* \[0.7.0-alpha] [WIP] [tabletop](https://github.com/testman42/tes3mp-tabletop-games) - () - [testman42](https://github.com/testman42/)
+* Currently contains just Mono card game which still has some ugly bugs.
 * \[0.7.0-alpha\] \[Fully functional\] [DataManager](https://github.com/tes3mp-scripts/DataManager) \- () - [Urm/uramer](https://github.com/uramer)
    * More of an API for managing data for other modules
 * \[0.7.0-alpha\] \[Fully functional\] [VisualHarvesting](https://github.com/tes3mp-scripts/VisualHarvesting) \- ([DataManager](https://github.com/tes3mp-scripts/DataManager)) - [Urm/uramer](https://github.com/uramer)
