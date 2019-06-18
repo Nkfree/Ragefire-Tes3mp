@@ -34,4 +34,4 @@ Credits.Show = function(pid)
 end
 
 
-customCommands.registerCommand("credits", Credits.Show)
+customCommandHooks.registerCommand("credits", Credits.Show)

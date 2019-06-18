@@ -331,4 +331,4 @@ end
 
 customEventHooks.registerValidator("OnPlayerInventory", Tournament.Inventory)
 customEventHooks.registerValidator("OnPlayerDeath", Tournament.Kill)
-customCommands.registerCommand("fwskirmish", Tournament.cmd)
+customCommandHooks.registerCommand("fwskirmish", Tournament.cmd)

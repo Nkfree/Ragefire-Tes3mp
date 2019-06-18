@@ -240,4 +240,4 @@ end -- end ongui
 
 customEventHooks.registerHandler("OnGUIAction", Bountys.OnGUIAction)
 customEventHooks.registerHandler("OnActorDeath", Bountys.GotKilled)
-customCommands.registerCommand("bounty", Bountys.Devide)
+customCommandHooks.registerCommand("bounty", Bountys.Devide)
