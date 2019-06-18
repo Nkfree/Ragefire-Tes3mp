@@ -110,13 +110,21 @@ SpendDrakens.OnGUIAction  = function(eventStatus, pid, idGui, data)
 		if tonumber(data) == 0 then
 			SpendDrakens.ShowDrakes(pid)
 		elseif tonumber(data) == 1 then
+			if kanaHousing ~= nil then
 			kanaHousing.OnUserCommand(pid) 
+			end
 		elseif tonumber(data) == 2 then
+			if kanaFurniture ~= nil then
 			kanaFurniture.OnCommand(pid)
+			end
 		elseif tonumber(data) == 3 then
+			if DirectTrade ~= nil then 
 			DirectTrade.ShowItem(pid)
+			end
 		elseif tonumber(data) == 4 then
+			if Bountys ~= nil then 
 			Bountys.SetPlayer(pid)
+			end
 		end
 	end
 		
@@ -127,4 +135,4 @@ customEventHooks.registerHandler("OnGUIAction", SpendDrakens.OnGUIAction)
 customEventHooks.registerHandler("OnPlayerJournal",SpendDrakens.Give)
 customEventHooks.registerHandler("OnPlayerBook",SpendDrakens.Give)
 customEventHooks.registerHandler("OnActorDeath",SpendDrakens.Give)
-customComandHooks.registerCommand("drakes", SpendDrakens.ShowSpend)
+customCommandHooks.registerCommand("drakes", SpendDrakens.ShowSpend)
