@@ -46,7 +46,7 @@ end
 
 
 if isObjectPlayer == true then
-	if players[1].activatingPid == nil then 
+	if not (players[1].activatingPid ~= nil) then 
 		doesObjectHaveActivatingPlayer = false
 		return customEventHooks.makeEventStatus(isValid,isValid)
 	end
