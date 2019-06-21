@@ -28,9 +28,9 @@ onactivatechanges = {}
  
 onactivatechanges.Activate = function(eventStatus, pid, cellDescription, objects, players)
 -- later take care of multiple objects
-doesObjectHaveActivatingPlayer = true  -- can this be different? yep it can
-
-isValid = true
+local doesObjectHaveActivatingPlayer = true  -- can this be different? yep it can
+local isObjectPlayer = false
+local isValid = true
 
 if players[1] ~= nil then 
 	isObjectPlayer = true -- activated object is a player
@@ -46,7 +46,7 @@ end
 
 
 if isObjectPlayer == true then
-	if not (players[1].activatingPid ~= nil) then 
+	if players[1].activatingPid == nil then 
 		doesObjectHaveActivatingPlayer = false
 		return customEventHooks.makeEventStatus(isValid,isValid)
 	end
