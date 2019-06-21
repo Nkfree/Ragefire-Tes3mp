@@ -7,7 +7,7 @@
 "https://en.uesp.net/wiki/Morrowind:Nchuleftingth_Expedition","have the report but edwinna doesnt take it",""
 "https://en.uesp.net/wiki/Morrowind:Escort_Itermerel","escorting doesnt work",""
 "https://en.uesp.net/wiki/Morrowind:Gra-Muzgob_Informant#Andrano_Ancestral_Tomb","Skull of Llevule Andrano needs respawn",""
-"https://en.uesp.net/wiki/Morrowind:Corprus_Cure","summons killed dagoth gares, killed a stalker, didnt get corprus, didnt get it cured",""
+"https://en.uesp.net/wiki/Morrowind:Corprus_Cure","summons killed dagoth gares, killed a stalker, didnt get corprus, didnt get it cured","https://github.com/Learwolf/tes3mp-Scripts/blob/master/tes3mp-server/server/scripts/custom/lear/prematureCorpusFix.lua"
 "https://en.uesp.net/wiki/Morrowind:Mehra_Milo_and_the_Lost_Prophecies","Getting final orders from Caius makes him disappear for all players - Mehra Milo isn't in her prison cell in the ministry of truth. I found her in Holamayan, but she doesn't tell anything for updating my journal",""
 "https://en.uesp.net/wiki/Morrowind:Quest_Items#Unique_Dwemer_Artifact","he keeps telling me to come back in one day",""
 "https://en.uesp.net/wiki/Morrowind:The_Path_of_the_Incarnate","Nibani Maesa of Urshilaku tells you to come back to her in a day",""
