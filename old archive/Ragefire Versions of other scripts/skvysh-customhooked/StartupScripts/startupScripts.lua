@@ -348,13 +348,14 @@ startupScripts.OnCellChange = function(eventStatus, pid)
                             for index, value in ipairs (startupCellChangeEnable) do
                                 local indexArray = {}
                                 commandArray = {}
+								local journal = {}
                                 local startupCellChangeEnable = startupCellChangeEnable[index]
                                 local startupQuest = startupCellChangeEnable.quest
                                 local startupIndex = startupCellChangeEnable.index
                                 if config.shareJournal == true then
-                                    local journal = WorldInstance.data.journal
+                                    journal = WorldInstance.data.journal
                                 else
-                                    local journal = Players[pid].data.journal
+                                    journal = Players[pid].data.journal
                                 end
                                 local i = 1
                                 j = 1
