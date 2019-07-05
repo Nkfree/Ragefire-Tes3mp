@@ -1,4 +1,6 @@
 ﻿# Startup Scripts
+* GET THE FILES FROM LEARWOLF REPO THX TO JAKOB
+* https://github.com/Learwolf/tes3mp-Scripts/
 ## VERSION 1.2
 
 The script attempts to load as much of the missing objects, variables and anything else that would otherwise be lost after a relog. The variables and entities are adjusted based on player's journal and is independent of the journal sharing progress. Current fixes addressed by the script are documented below and one can expect the list to expand in the future.
@@ -17,11 +19,14 @@ The charGen disabling has been tested only briefly. Message box about character 
 
 ## INSTALLING INSTRUCTIONS
 
-1) Copy `startupData.json` (from a folder above) to `.../tes3mp/mp-stuff/data`.
+1) Copy `startupData.json` (from a folder above) to `.../tes3mp/server/data`.
 
-2) Copy `startupScripts.lua` to `.../tes3mp/mp-stuff/scripts/custom`.
+2) Copy `startupScripts.lua` to `.../tes3mp/server/scripts/custom`.
 
-2) open customScripts.lua and add this line: require("custom/startupScripts")
+2) open /server/scripts/customScripts.lua and add this line: 
+```
+startupScripts = require("custom/startupScripts")
+```
 
 
 
