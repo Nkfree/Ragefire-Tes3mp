@@ -1,5 +1,6 @@
 rageExp = {}
-rageExp.IDsToPoints = jsonInterface.load("rageExp.json")
+-- this is a version with rageExp.json removed
+rageExp.IDsToPoints = {} --jsonInterface.load("rageExp.json")
 rageExp.rageCustomVariables = { "rageExp", "rageExpProgress", "rageLevel", "ragePointsSpent", "ragePoints","magicTreePoints", "magicPointsSpent", "warTreePoints", "warPointsSpent",
  "defensePointsSpent", "healerPointsSpent", "stealthPointsSpent", "defenseLifePool", "defenseRegeneration", "defenseSwiftness", "defenseResilience", "defenseEvasion", "defenseTurtleShell", 
  "defenseVitality", "defenseDumbBrute", "defenseSafeguard", "defenseResistFire", "defenseResistFrost", "defenseResistShock", "defenseResistPoison", "stealthGreed", "stealthSerpentsBlood", "stealthGlibFeet", 
@@ -10,13 +11,13 @@ rageExp.rageCustomVariables = { "rageExp", "rageExpProgress", "rageLevel", "rage
 	
 	
 rageExp.Login = function(eventStatus, pid)
-if Players[pid].data.customVariables["ragePoints"] == nil then Players[pid].data.customVariables["ragePoints"] = 3 end
+	if Players[pid].data.customVariables["ragePoints"] == nil then Players[pid].data.customVariables["ragePoints"] = 3 end
 
-for _, value in pairs(rageExp.rageCustomVariables) do
-if Players[pid].data.customVariables[value] == nil then
-	Players[pid].data.customVariables[value] = 0
-end
-end
+	for _, value in pairs(rageExp.rageCustomVariables) do
+		if Players[pid].data.customVariables[value] == nil then
+			Players[pid].data.customVariables[value] = 0
+		end
+	end
 end
 
 rageExp.ProcessLatestKill = function(pid, refId)
@@ -35,8 +36,12 @@ rageExp.ProcessLatestKill = function(pid, refId)
 		if difficulty == "default" then
 		difficulty = config.difficulty
 		end
-
+	end
+	if totalPoints ~= nil then
 		totalPoints = totalPoints
+	else
+		totalPoints = 10
+	end
 		totalPoints = math.ceil(totalPoints)
 
         if totalPoints > 0 then
@@ -44,7 +49,7 @@ rageExp.ProcessLatestKill = function(pid, refId)
             tes3mp.MessageBox(pid, -1, color.White .. "You have gained " .. color.LightGreen ..
                 totalPoints .. color.White .. " experience")
         end
-    end
+    
 	
 	local currentRageLevel = Players[pid].data.customVariables.rageLevel
 	local baseXp = 100
@@ -74,7 +79,7 @@ rageExp.ProcessLatestKillinParty = function(pid, refId, nerfFactor)
 	
     tes3mp.LogMessage(enumerations.log.INFO, "Running rageExp.ProcessLatestKill() for pid " .. pid .. ", refId " .. refId)
 
-    if rageExp.IDsToPoints[refId] ~= nil then
+     if rageExp.IDsToPoints[refId] ~= nil then
 		
         local basePoints = rageExp.IDsToPoints[refId].points
         local extraPoints = math.random(-basePoints / 10, basePoints / 10)
@@ -86,7 +91,13 @@ rageExp.ProcessLatestKillinParty = function(pid, refId, nerfFactor)
 		if difficulty == "default" then
 		difficulty = config.difficulty
 		end
-
+	end
+	if totalPoints ~= nil then
+		totalPoints = totalPoints
+	else
+		totalPoints = 10
+	end
+	
 		totalPoints = totalPoints / 1.35
 		totalPoints = math.ceil(totalPoints)
 		
@@ -98,7 +109,7 @@ rageExp.ProcessLatestKillinParty = function(pid, refId, nerfFactor)
             tes3mp.MessageBox(pid, -1, color.White .. "You have gained " .. color.LightGreen ..
                 totalPoints .. color.White .. " group experience")
         end
-    end
+    
 	
 	local currentRageLevel = Players[pid].data.customVariables.rageLevel
 	local baseXp = 100

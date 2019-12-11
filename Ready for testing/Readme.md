@@ -15,13 +15,22 @@ require("custom/kickping")
 require("custom/legendaryItems")
 require("custom/meditate")
 require("custom/onactivatechanges")
-require("custom/preObjectsAndDeletions")
+-- require("custom/preObjectsAndDeletions") -- preObjects.json -- refNumDeletionsByCell.json
 require("custom/racialbonuses")
 require("custom/rage_cmd")
 require("custom/russiannames")
 require("custom/soultax")
 require("custom/tutorialKills")
-require("custom/rageExp")
+require("custom/rageExp") -- rageExp.json
+require("custom/channels")
+require("custom/GroupParty")
+require("custom/MainQuestRequiredKills")
+require("custom/mercantileFix")
+require("custom/responding")
+require("custom/setstronghold")
+require("custom/someMenus")
+require("custom/starteritems")
+require("custom/warptimer")
 ```
 
 Do the two "addbyHand" files
@@ -29,23 +38,28 @@ Do the two "addbyHand" files
 add the recordstore and jsons to /data/
 
 
-add menus
+add menus 
+(change "chargen" menu to teleport at the end)
+(remove endchargen from "chargen" menu)
 
 ```
-config.menuHelperFiles = { "help", "defaultCrafting", "advancedExample", "progressmenu", "rage", "crafting", "fletching", "shopItems", "cannotLoot", "changeLog", "charGen", "charGenClothes", "chatMenu", "crafting", "craftingRecipes", "defaultCrafting", "fletchingRecipes", "help", "helpRagefire", "leatherMenu", "leatherRecipeMenu", "legendaryItemsMenu", "mainQuest", "menuguilds", "menuquest", "rageTest", "tailoring", "teleportMenu", "transporters", "tutorial" }
+config.menuHelperFiles = { "help", "defaultCrafting", "advancedExample", "rage", "crafting", "fletching", "shopItems", "cannotLoot", "changeLog", "charGen", "charGenClothes", "chatMenu", "crafting", "craftingRecipes", "defaultCrafting", "fletchingRecipes", "help", "helpRagefire", "leatherMenu", "leatherRecipeMenu", "legendaryItemsMenu", "mainQuest", "menuguilds", "menuquest", "tailoring", "teleportMenu", "transporters", "tutorial" }
 ```
 
 
 Add to the mix
 ```
-Groupparty
 
-kanaHousing
-kanaFurniture
-kanaRevive
-kanaCellReset
-kanaStorage
-MarketPlace Alternative
+kanaBank = require("custom/kanaBank")
+decorateHelp = require("custom/decorateHelp")
+kanaFurniture = require("custom/kanaFurniture")
+kanaHousing = require("custom/kanaHousing")
+CellReset = require("custom/CellReset") -- (change to delete loadedCells and kills) (add exemptions list from kanaHousing)
+require("custom/preObjectsAndDeletions") -- (load after cellreset)
+
+
+kanaRevive -- needs customHooks
+JerTheBears MarketPlace (ported) (add cell to cellreset blacklist)
 
 boyos notewriting
 boyos dungeonloot

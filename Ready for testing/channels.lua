@@ -2,9 +2,10 @@
 
             --in function OnPlayerSendMessage in eventHandler.lua
             --replace tes3mp.SendMessage(pid, message, true) with 
-            
+channels = {}
 channels.message = function(eventStatus, pid, message)
 
+	if eventStatus.validDefaultHandler then
 			if message:sub(1, 1) == '/' then
 
                 local command = (message:sub(2, #message)):split(" ")
@@ -24,18 +25,22 @@ channels.message = function(eventStatus, pid, message)
                     end
                 end
 
-                for pd, pl in pairs(Players) do
+            for pd, pl in pairs(Players) do
                 if pl.data.customVariables.ChatChannel == nil then Players[pd].data.customVariables.ChatChannel = 1 end
-				if pl.data.customVariables.ChatChannel == Players[pid].data.customVariables.ChatChannel then
+					if pl.data.customVariables.ChatChannel == Players[pid].data.customVariables.ChatChannel then
 						tes3mp.SendMessage(pd, message, false)
 					end
 				end
             end
+	end
 			return customEventHooks.makeEventStatus(false, false)
 end			
             --place at beginning of function OnPlayerConnect in serverCore
 channels.connect = function(eventStatus, pid)
+
+if eventStatus.validCustomHandlers then --check if some other script made this event obsolete
             Players[pid].data.customVariables.ChatChannel = 1
+end
 end
 
             --make command in cmdChain

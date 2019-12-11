@@ -10,11 +10,15 @@ rageExp.rageCustomVariables = { "rageExp", "rageExpProgress", "rageLevel", "rage
 	
 	
 rageExp.Login = function(eventStatus, pid)
+
+if eventStatus.validCustomHandlers then --check if some other script made this event obsolete
+
 if Players[pid].data.customVariables["ragePoints"] == nil then Players[pid].data.customVariables["ragePoints"] = 3 end
 
 for _, value in pairs(rageExp.rageCustomVariables) do
 if Players[pid].data.customVariables[value] == nil then
 	Players[pid].data.customVariables[value] = 0
+end
 end
 end
 end
@@ -122,6 +126,8 @@ end
 
 rageExp.Decide = function(eventStatus, pid, cellDescription)
 
+if eventStatus.validCustomHandlers then --check if some other script made this event obsolete
+
         local uniqueIndex = tes3mp.GetActorRefNum(0) .. "-" .. tes3mp.GetActorMpNum(0)
 
 			if tes3mp.DoesActorHavePlayerKiller(0) then
@@ -145,6 +151,7 @@ rageExp.Decide = function(eventStatus, pid, cellDescription)
 						
              end
 			end
+end
 end
 
 rageExp.Help = function(pid, cmd)
@@ -219,4 +226,5 @@ customCommandHooks.registerCommand("water", rageExp.abilityCmd)
 customCommandHooks.registerCommand("rage", rageExp.cmd)
 customCommandHooks.registerCommand("help", rageExp.Help)
 customEventHooks.registerHandler("OnActorDeath", rageExp.Decide)
-customEventHooks.registerHandler("OnPlayerConnect", rageExp.Login)
+customEventHooks.registerHandler("OnPlayerFinishLogin", rageExp.Login)
+customEventHooks.registerHandler("OnPlayerEndCharGen", rageExp.Login)

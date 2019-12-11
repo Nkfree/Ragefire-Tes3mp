@@ -24,11 +24,15 @@ starteritems = {}
 
 
 starteritems.OnPlayerEndCharGen = function(eventStatus, pid)
+
+if eventStatus.validCustomHandlers then --check if some other script made this event obsolete
+
     if Players[pid] ~= nil and Players[pid]:IsLoggedIn() then
         Players[pid]:SaveEquipment()
         Players[pid].currentCustomMenu = "appearance"
         menuHelper.DisplayMenu(pid, Players[pid].currentCustomMenu)
     end
+end
 end
 -- calls also the choose homecity menus etc .. 
 

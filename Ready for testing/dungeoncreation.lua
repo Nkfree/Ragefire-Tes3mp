@@ -5,6 +5,8 @@ dungeoncreation = {}
 -- required tables
 
 dungeoncreation.postInit = function(eventStatus)
+
+if eventStatus.validCustomHandlers then --check if some other script made this event obsolete
 -- Home Cities
 homecityTable = {"-3, -2","-2, 2","-2, -9","6, -7","-22, 17","Mournhold, Temple Courtyard",
 "Sotha Sil, Outer Flooded Halls","-9, 16","-11, 11","-4, 18","7, 22","11, 14","13, 14","15, 5",
@@ -166,8 +168,11 @@ cellsForMonsterBuffs.by_resistancetofire50 = {"Hassour","Hassour, Shrine"}
 				tes3mp.LogMessage(2, "-- Cell Difficultys have been set -- ")
                 --tableHelper.print(cellDifficulties)
 end
+end
 
 dungeoncreation.here = function(eventStatus, pid)
+
+if eventStatus.validCustomHandlers then --check if some other script made this event obsolete
 --[[ Dungeon Creation ]]--	
 -- Difficulty			
 				local cell = tes3mp.GetCell(pid)
@@ -211,7 +216,7 @@ dungeoncreation.here = function(eventStatus, pid)
                     -- Are we in a cell where the monsters should be buffed?
                     if tableHelper.containsValue(cellsForMonsterBuffs[locationalMonsterBuff], tes3mp.GetCell(pid)) then
                         local actorList = LoadedCells[cell].data.packets.actorList
-                        logicHandler.RunConsoleCommandOnObjectsForPlayer(pid, "addspell " .. locationalMonsterBuff, cell, actorList)
+                        logicHandler.RunConsoleCommandOnObjects(pid, "addspell " .. locationalMonsterBuff, cell, actorList)
                     end
                 end
 
@@ -267,7 +272,7 @@ dungeoncreation.here = function(eventStatus, pid)
 					tes3mp.MessageBox(pid, -1, color.White .. "You have entered a " .. color.Red .. "PvP " .. color.White .. "area")
 				end
 --[[ End of Cell/Dungeon Editing ]]--
-
+end
 end
 
 

@@ -6,6 +6,8 @@ racialbonuses = {}
 
 racialbonuses.use = function(eventStatus, pid)
 
+if eventStatus.validCustomHandlers then --check if some other script made this event obsolete
+
 local self = Players[pid]
 
 -- Racial Bonuses	
@@ -82,5 +84,7 @@ local self = Players[pid]
 	end	
 -- End Racial Powers]]
 end
+end
 
+customEventHooks.registerHandler("OnPlayerEndCharGen", racialbonuses.use)
 customEventHooks.registerHandler("OnPlayerFinishLogin", racialbonuses.use)

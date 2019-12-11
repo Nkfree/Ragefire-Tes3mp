@@ -46,6 +46,8 @@ end
 
 legendaryItems.Decide = function(eventStatus, pid, cellDescription)
 
+if eventStatus.validCustomHandlers then --check if some other script made this event obsolete
+
         local uniqueIndex = tes3mp.GetActorRefNum(0) .. "-" .. tes3mp.GetActorMpNum(0)
 
 	if tes3mp.DoesActorHavePlayerKiller(0) then
@@ -54,7 +56,7 @@ legendaryItems.Decide = function(eventStatus, pid, cellDescription)
 					legendaryItems.ProcessLatestKill(pid, refId)
 			end
 	end
-
+end
 end
 
 customEventHooks.registerHandler("OnActorDeath", legendaryItems.Decide)

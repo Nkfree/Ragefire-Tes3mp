@@ -1,5 +1,9 @@
 ## Exerpience Point Progression
  by Ragefire
+ * this adds ability to get EXP for kills
+ * this version got the json removed
+ * you still need a menu to spend points after you got Points
+ * this is more a sth for public servers who want to dig deeper into this
  
 ### Used as Example
 

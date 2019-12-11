@@ -50,9 +50,6 @@ meditate.cmd = function(pid, cmd)
 end
 
 
-customCommandHooks.registerCommand("med", meditate.cmd)
-customCommandHooks.registerCommand("meditate", meditate.cmd)
-
 function OnMeditateTimeExpiration(pid)
 
     if Players[pid] ~= nil and Players[pid].meditateTimerId ~= nil then
@@ -91,3 +88,6 @@ function OnMeditateReminderTimeExpiration(pid)
     Players[pid]:Message( color.DarkGray .. "You can now meditate again.\n")
     end
 end
+
+customCommandHooks.registerCommand("med", meditate.cmd)
+customCommandHooks.registerCommand("meditate", meditate.cmd)

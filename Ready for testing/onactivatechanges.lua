@@ -27,26 +27,35 @@ onactivatechanges = {}
  
  
 onactivatechanges.Activate = function(eventStatus, pid, cellDescription, objects, players)
-
-doesObjectHaveActivatingPlayer = true  -- can this be different?
-
-isValid = true
+-- later take care of multiple objects
+local doesObjectHaveActivatingPlayer = true  -- can this be different? yep it can
+local isObjectPlayer = false
+local isValid = true
 
 if players[1] ~= nil then 
-	isObjectPlayer = true 
-end -- activated object is a player
+	isObjectPlayer = true -- activated object is a player
+else
+	if objects[1] == nil then -- maybe through multiple objects we got 1 is nil .. take care of that later
+				return customEventHooks.makeEventStatus(isValid,isValid)
+	end
+end
+		
 
 
 
 
 
 if isObjectPlayer == true then
+	if players[1].activatingPid == nil then 
+		doesObjectHaveActivatingPlayer = false
+		return customEventHooks.makeEventStatus(isValid,isValid)
+	end
 -- party commands
 -- to see the current stats of PartyMembers
 -- add to eventHandlers OnActivate Chain
 			activatingPid = players[1].activatingPid
 
-				--if GroupParty.IsParty(activatingPid) then 
+				if GroupParty.IsParty(activatingPid) then 
 					local activatedOne = players[1].pid
 					local health = tostring(tes3mp.GetHealthCurrent(activatedOne))
 					local magicka = tostring(tes3mp.GetMagickaCurrent(activatedOne))
@@ -63,10 +72,14 @@ if isObjectPlayer == true then
 					List = List .. color.White .. "Current Magicka: " .. color.RoyalBlue .. math.floor(magicka / maxMagicka * 100) .. "%\n"
 					List = List .. color.White .. "Current Fatigue: " .. color.LightGreen .. math.floor(fatigue / maxFatigue * 100) .. "%\n"
 					tes3mp.MessageBox(activatingPid,-1,List)
-				--end
+				end
 				
 else
-		--necessary vars
+	if objects[1].activatingPid == nil then 
+		doesObjectHaveActivatingPlayer = false
+		return customEventHooks.makeEventStatus(isValid,isValid)
+	end		
+			--necessary vars
 				index = 0 -- should be useless 
 			activatingPid = objects[1].activatingPid
 
@@ -76,12 +89,20 @@ else
 				ObjectMpNum = splitIndex[2]
 
 			refId = objects[1].refId
-
+			
  -- house block				
-				if not tableHelper.containsValue(doorTable, refId) and Players[pid].data.isInOwnedHouse == true then
-					isValid = false
-
-				end
+                local houseName, cdata = kanaHousing.GetIsInHouse(activatingPid)
+                    	
+                if houseName then -- The player isn't in a house cell, so we don't care
+                    	if kanaHousing.GetHouseOwnerName(houseName) then -- the house got an owner
+            				if not tableHelper.containsValue(doorTable, refId) and not kanaHousing.IsOwner(Players[activatingPid].name, houseName) and not kanaHousing.IsCoOwner(Players[activatingPid].name, houseName) then
+            					isValid = false
+            				end
+        			    end
+    		    end
+				--[[
+				In kanaHousing change onObjectDelete to validator and return false
+				]]
 -- sneak block  
 				if tes3mp.GetSneakState(activatingPid) and cellDescription == "ToddTest" then
 					isValid = false
